@@ -1,4 +1,4 @@
-## Dice's Pizza
+## Pizza Manager APP
 
 This is an example pizza tracking app built with Laravel, React, and Inertia.js to demonstrate automatic polling and live reloads.
 
@@ -14,4 +14,15 @@ Clone this repo and run the following commands to install the dependencies and s
 - `php artisan serve`
 - `npm run dev`
 
-Once you've opened your browser to the application, you can use the register link to create an account and view the seeded pizza orders.
+---------------------------------------------------------
+## New Features
+- add status table. status(id, descrizione, sequence, isPreparing)
+    - add factory and migrations
+- add role into users
+    - add admin page/component to assign users role
+    - an user can have only one role
+- login role rules:
+    1. admin => can modify users role
+    2. chef => see orders and detail
+    3. delivery-man => see only ready orders and can modify only his order
+    4. normal user are redirect to last order page
