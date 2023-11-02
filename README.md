@@ -18,6 +18,7 @@ Clone this repo and run the following commands to install the dependencies and s
 ## New Features
 - add status table. status(id, descrizione, sequence, isPreparing)
     - add factory and migrations
+- implement SQLite
 - add role into users
     - add admin page/component to assign users role
     - an user can have only one role
