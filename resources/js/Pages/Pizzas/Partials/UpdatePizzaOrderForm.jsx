@@ -5,6 +5,7 @@ import TextInput from '@/Components/TextInput';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 import SelectInput from "@/Components/SelectInput.jsx";
+import PizzaStatus from './PizzaStatus';
 
 export default function UpdatePizzaOrderForm({ pizza, statusOptions, toppings, className = '' }) {
 
@@ -15,23 +16,9 @@ export default function UpdatePizzaOrderForm({ pizza, statusOptions, toppings, c
         status: pizza.status
     });
 
-    const submit = (e) => {
-        e.preventDefault();
-
-        patch(route('pizzas.update', pizza.id));
-    };
-
     return (
         <section className={className}>
-            <header>
-                <h2 className="text-lg font-medium text-gray-900">Order Information</h2>
-
-                <p className="mt-1 text-sm text-gray-600">
-                    Update your account's profile information and email address.
-                </p>
-            </header>
-
-            <form onSubmit={submit} className="mt-6 space-y-6">
+            <form className="space-y-6">
                 <div>
                     <InputLabel htmlFor="size" value="Size" />
 
@@ -73,24 +60,26 @@ export default function UpdatePizzaOrderForm({ pizza, statusOptions, toppings, c
                         className="mt-1 block w-full"
                         options={statusOptions}
                         value={data.status}
-                        onChange={(e) => setData('status', e.target.value)}
+                        disabled
                     />
 
                     <InputError className="mt-2" message={errors.status} />
                 </div>
 
-                <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>Save Changes</PrimaryButton>
+                <PizzaStatus currentStatus={pizza.status}></PizzaStatus>
+                <div className="text-center mt-4">
+                    <p className="text-lg">
+                        {pizza.chef} follow your order 
+                        <span className="underline font-semibold">{pizza.last_updated}</span>
+                    </p>
+                </div>
 
-                    <Transition
-                        show={recentlySuccessful}
-                        enter="transition ease-in-out"
-                        enterFrom="opacity-0"
-                        leave="transition ease-in-out"
-                        leaveTo="opacity-0"
-                    >
-                        <p className="text-sm text-gray-600">Saved.</p>
-                    </Transition>
+                <PizzaStatus currentStatus={pizza.status}></PizzaStatus>
+                <div className="text-center mt-4">
+                    <p className="text-lg">
+                        {pizza.chef} take your pizza 
+                        <span className="underline font-semibold">{pizza.last_updated}</span>
+                    </p>
                 </div>
             </form>
         </section>

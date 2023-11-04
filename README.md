@@ -16,14 +16,17 @@ Clone this repo and run the following commands to install the dependencies and s
 
 ---------------------------------------------------------
 ## New Features
-- add status table. status(id, descrizione, sequence, isPreparing)
-    - add factory and migrations
-- implement SQLite
-- add role into users
-    - add admin page/component to assign users role
-    - an user can have only one role
-- login role rules:
-    1. admin => can modify users role
-    2. chef => see orders and detail
-    3. delivery-man => see only ready orders and can modify only his order
-    4. normal user are redirect to last order page
+- implement different dashboard:
+    1. if admin => can see all users and can modify his role
+    2. if chef => see only pizzas with fk_pizzastatus = NULL OR fk_chef = *my_id*
+    3. if delivery-man => see only pizzas with (fk_deliveryman = NULL AND fk_pizzastatus = 3) OR fk_deliveryman = *my_id*
+    4. if guest => can see mine pizzas and their states (show.jsx) (fk_client = *my_id*) or put a new order
+- put a button in table that change the next state (*id_state* += 1) [pt. 2 and 3]
+- put nice toppings label
+
+---------------------------------------------------------
+## Done
+- added tables (model, factory, seeder, ....):
+    1. role
+    2. status
+    3. added foreign key into pizzas and users

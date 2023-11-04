@@ -33,12 +33,9 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                 </div>
                 <div className="max-w-7xl mx-auto p-6 lg:p-8 w-100">
                     <div className="flex justify-center mt-16 px-6 sm:items-center sm:justify-between">
-                <div className="bg-welcome">
                         <div className="text-center text-sm w-100 title">
                             Pizza Manager APP
                         </div>
-
-                </div>
                     </div>
                     <div className="flex justify-center mt-16 px-6 sm:items-center sm:justify-between">
                         <div className="text-center text-sm sm:text-left">
