@@ -4,7 +4,11 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Pizza;
+use App\Models\PizzaToppings;
+use App\Models\Role;
+use App\Models\Status;
 use App\Models\User;
+use App\Models\Topping;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,7 +18,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(10)->create();
+        
+        Role::factory(4)->create();
+        Status::factory(6)->create();
+        Topping::factory(10)->create();
+        User::factory(25)->create();
         Pizza::factory(20)->create();
+
+        PizzaToppings::factory(25)->create();
     }
 }
