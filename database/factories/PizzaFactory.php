@@ -2,7 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Models\Pizza;
+use App\Models\Role;
+use App\Models\Status;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Utils\UtilityFunctions;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Pizza>
@@ -16,34 +21,20 @@ class PizzaFactory extends Factory
      */
     public function definition(): array
     {
-        $toppingChoices = [
-            'Extra Cheese',
-            'Black Olives',
-            'Pepperoni',
-            'Sausage',
-            'Anchovies',
-            'Jalapenos',
-            'Onion',
-            'Chicken',
-            'Ground Beef',
-            'Green Peppers',
-        ];
-
-        $toppings = [];
-
-        for($i = 1; $i <= rand(1, 4); $i++) {
-            $toppings[] = $toppingChoices[rand(0, 9)];
-        }
-
-        $toppings = array_unique($toppings);
+        $chefs = User::getByRole(Role::getRoleByName('chef'));
+        $pizzastatues = Status::getPizzaStatus();
+        
+        $deliverymans = User::getByRole(Role::getRoleByName('delivery-man'));
+        $deliverystatues = Status::getDeliverymanStatus();
 
         return [
             'id' => rand(1111111, 9999999),
-            'user_id' => rand(1, 10),
-            'size' => ['Small', 'Medium', 'Large', 'Extra-Large'][rand(0, 3)],
-            'crust' => ['Regular', 'Thin', 'Garlic'][rand(0, 2)],
-            'status' => ['Ordered', 'Prepping', 'Baking', 'Checking', 'Ready'][rand(0, 4)],
-            'toppings' => $toppings,
+            'size' => Pizza::getSizes()[rand(0, 3)],
+            'crust' => Pizza::getCrustSizes()[rand(0, 2)],
+            'chef_id' => UtilityFunctions::pick_itm_random($chefs)["id"],
+            'pizza_idstatus' => UtilityFunctions::pick_itm_random($pizzastatues)["id"],
+            'deliveryman_id' => UtilityFunctions::pick_itm_random($deliverymans)["id"],
+            'delivery_idstatus' => UtilityFunctions::pick_itm_random($deliverystatues)["id"],
         ];
     }
 }

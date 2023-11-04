@@ -4,11 +4,14 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
- */
 class StatusFactory extends Factory
 {
+    static int $idx = -1;
+    public static function getIdx(): int
+    {
+        self::$idx++;
+        return self::$idx;
+    }
     /**
      * Define the model's default state.
      *
@@ -16,8 +19,11 @@ class StatusFactory extends Factory
      */
     public function definition(): array
     {
+        $i = StatusFactory::getIdx();
         return [
-            
+            'name'=>['Ordered','Baking','Ready','Picked','Arriving','Paid'][$i],
+            'isPizzaStatus'=>[true,true,true,false,false,false][$i],
+            'sequence'=>[1,2,3,1,2,3][$i]
         ];
     }
 }

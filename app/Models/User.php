@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id',
     ];
 
     /**
@@ -46,5 +47,10 @@ class User extends Authenticatable
     public function pizzas()
     {
         return $this->hasMany(Pizza::class);
+    }
+
+    public static function getByRole(Role $role):array
+    {
+        return User::all()->where('role_id', $role->id)->toArray();
     }
 }
