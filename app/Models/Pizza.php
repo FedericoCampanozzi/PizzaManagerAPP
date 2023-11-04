@@ -12,42 +12,53 @@ class Pizza extends Model
 
     use HasFactory;
     protected $fillable = [
-        'client',
-        'toppings'
     ];
 
-    public function getClientAttribute(): BelongsTo
+    protected $appends = [
+        'client',
+        'toppings',
+        'chef',
+        'status',
+        'deliveryman',
+        'delivery'
+    ];
+
+    public function getClientAttribute(): string
     {
-        return $this->belongsTo(User::class,'fk_client');
+        return $this->belongsTo(User::class,'fk_client')->get(['name'])->map(fn($el):string=>$el->name)->first();
     }
     
     public function getToppingsAttribute(): string
     {
-        $str = '';
-        foreach (PizzaToppings::all()->where('fk_pizza',$this->id) as $topping) {
-            $str .= ''. $topping->name .' ';
-        }
-        return $str;
+        $t = PizzaToppings::join("topping","pizzatoppings.fk_topping","=","topping.id")
+                    ->where('fk_pizza', $this->id)
+                    ->select("topping.name","fk_pizza")
+                    ->get()
+                    ->map(fn($el,$idx):string => $idx.')'.' '.$el->name.' ')
+                    ->join('');
+        if ($t == '') $t = "No Toppings :(";
+        else $t = "Toppings : ".$t;
+        return $t;
     }
 
-    public function getChefAttribute(): BelongsTo
+    public function getChefAttribute(): string
     {
-        return $this->hasOne(User::class,'fk_chef')->name;
+        return $this->belongsTo(User::class,'fk_chef')->get(['name'])->map(fn($el):string=>$el->name)->first();
     }
 
-    public function getPizzaStatusAttribute(): BelongsTo
+    public function getStatusAttribute(): string
     {
-        return $this->belongsTo(Status::class,'fk_pizzastatus')->name;
+        return $this->belongsTo(Status::class,'fk_pizzastatus')->get(['name'])->map(fn($el):string=>$el->name)->first();
     }
     
-    public function getDeliverymanAttribute(): BelongsTo
+    public function getDeliverymanAttribute(): string
     {
-        return $this->belongsTo(User::class,'fk_deliveryman')->name;
+        return $this->belongsTo(User::class,'fk_deliveryman')->get(['name'])->map(fn($el):string=>$el->name)->first();
     }
 
-    public function getDeliveryStatusAttribute(): BelongsTo
+    public function getDeliveryAttribute(): string
     {
-        return $this->belongsTo(Status::class,'fk_deliverystatus')->name;
+        return $this->belongsTo(Status::class,'fk_deliverystatus')->get(['name'])->map(fn($el):string=>$el->name)->first();
     }
 
     public function getLastUpdatedAttribute(): string

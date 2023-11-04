@@ -6,10 +6,10 @@ const columns = [
     'client',
     'size',
     'toppings',
-    'pizza status',
-    'chef name',
-    'deliveryman man',
-    'delivery status'
+    'status',
+    'chef',
+    'deliveryman',
+    'delivery'
 ];
 
 export default function All({ auth, pizzas }) {
