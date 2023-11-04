@@ -4,56 +4,57 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-//use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Pizza extends Model
 {
+    public $table = 'pizzas';
+
     use HasFactory;
-    protected $appends = [
-        'client_name'
+    protected $fillable = [
+        'client',
+        'toppings'
     ];
-    /*
-    protected $guarded = [];
-    
-    protected $appends = [
-        'chef_name',
-        'pizza_status',
-        'deliveryman_name',
-        'delivery_status',
-        'last_updated'
-    ];
-    protected $hidden = [];
-    */
-    public function getClientNameAttribute(): string
-    {
-        return $this->belongsTo(User::class,'chef_id')->name;
-    }
-    /*
-    public function getChefNameAttribute(): string
-    {
-        return $this->hasOne(User::class,'chef_id')->name;
-    }
 
-    public function getPizzaStatusAttribute(): string
+    public function getClientAttribute(): BelongsTo
     {
-        return $this->belongsTo(Status::class,'pizza_idstatus')->name;
+        return $this->belongsTo(User::class,'fk_client');
     }
     
-    public function getDeliverymanNameAttribute(): string
+    public function getToppingsAttribute(): string
     {
-        return $this->belongsTo(User::class,'deliveryman_id')->name;
+        $str = '';
+        foreach (PizzaToppings::all()->where('fk_pizza',$this->id) as $topping) {
+            $str .= ''. $topping->name .' ';
+        }
+        return $str;
     }
 
-    public function getDeliveryStatusAttribute(): string
+    public function getChefAttribute(): BelongsTo
     {
-        return $this->belongsTo(Status::class,'delivery_idstatus')->name;
+        return $this->hasOne(User::class,'fk_chef')->name;
+    }
+
+    public function getPizzaStatusAttribute(): BelongsTo
+    {
+        return $this->belongsTo(Status::class,'fk_pizzastatus')->name;
+    }
+    
+    public function getDeliverymanAttribute(): BelongsTo
+    {
+        return $this->belongsTo(User::class,'fk_deliveryman')->name;
+    }
+
+    public function getDeliveryStatusAttribute(): BelongsTo
+    {
+        return $this->belongsTo(Status::class,'fk_deliverystatus')->name;
     }
 
     public function getLastUpdatedAttribute(): string
     {
         return $this->updated_at->diffForHumans();
     }
-    */
+    
     public static function getSizes():array
     {
         return ['Small', 'Medium', 'Large', 'Extra-Large'];

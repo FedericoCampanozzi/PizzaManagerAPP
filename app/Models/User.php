@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -20,8 +21,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
-        'role_id',
+        'password'
     ];
 
     /**
@@ -51,6 +51,6 @@ class User extends Authenticatable
 
     public static function getByRole(Role $role):array
     {
-        return User::all()->where('role_id', $role->id)->toArray();
+        return User::all()->where('fk_role', $role->id)->toArray();
     }
 }

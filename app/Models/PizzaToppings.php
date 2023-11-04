@@ -10,8 +10,5 @@ class PizzaToppings extends Model
     public $table = 'pizzatoppings';
     use HasFactory;
 
-    protected $appends = [
-        'pizza_id',
-        'topping_id'
-    ];
+    protected $appends = [];
 }

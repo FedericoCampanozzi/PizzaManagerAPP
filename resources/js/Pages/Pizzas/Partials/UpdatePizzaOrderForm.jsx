@@ -6,12 +6,12 @@ import { Link, useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 import SelectInput from "@/Components/SelectInput.jsx";
 
-export default function UpdatePizzaOrderForm({ pizza, className = '' }) {
+export default function UpdatePizzaOrderForm({ pizza, statusOptions, toppings, className = '' }) {
 
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
         size: pizza.size,
         crust: pizza.crust,
-        toppings: pizza.toppings.join(', '),
+        toppings: toppings,
         status: pizza.status
     });
 
@@ -20,14 +20,6 @@ export default function UpdatePizzaOrderForm({ pizza, className = '' }) {
 
         patch(route('pizzas.update', pizza.id));
     };
-
-    const statusOptions = [
-        'Ordered',
-        'Prepping',
-        'Baking',
-        'Checking',
-        'Ready'
-    ];
 
     return (
         <section className={className}>

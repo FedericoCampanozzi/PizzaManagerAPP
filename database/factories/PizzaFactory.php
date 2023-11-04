@@ -32,11 +32,11 @@ class PizzaFactory extends Factory
             'id' => rand(1111111, 9999999),
             'size' => Pizza::getSizes()[rand(0, 3)],
             'crust' => Pizza::getCrustSizes()[rand(0, 2)],
-            'userclient_id' => UtilityFunctions::pick_itm_random($clients)["id"],
-            'chef_id' => UtilityFunctions::pick_itm_random($chefs)["id"],
-            'pizza_idstatus' => UtilityFunctions::pick_itm_random($pizzastatues)["id"],
-            'deliveryman_id' => UtilityFunctions::pick_itm_random($deliverymans)["id"],
-            'delivery_idstatus' => UtilityFunctions::pick_itm_random($deliverystatues)["id"],
+            'fk_client' => UtilityFunctions::pick_itm_random($clients)["id"],
+            'fk_chef' => UtilityFunctions::pick_itm_random($chefs)["id"],
+            'fk_pizzastatus' => UtilityFunctions::pick_itm_random($pizzastatues)["id"],
+            'fk_deliveryman' => UtilityFunctions::pick_itm_random($deliverymans)["id"],
+            'fk_deliverystatus' => UtilityFunctions::pick_itm_random($deliverystatues)["id"],
         ];
     }
 }

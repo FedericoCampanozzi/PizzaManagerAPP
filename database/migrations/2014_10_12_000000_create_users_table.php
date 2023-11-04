@@ -13,14 +13,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->integer('id')->unsigned()->autoIncrement();
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-            $table->foreignIdFor(Role::class, 'role_id')->nullable();
+            $table->integer('fk_role')->unsigned()->default(4)->foreign('fk_role')->references('id')->on('role');
         });
     }
 

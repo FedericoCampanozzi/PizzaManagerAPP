@@ -3,7 +3,7 @@ import { Head } from '@inertiajs/react';
 import Table from "@/Components/Table.jsx";
 
 const columns = [
-    'user name',
+    'client',
     'size',
     'toppings',
     'pizza status',

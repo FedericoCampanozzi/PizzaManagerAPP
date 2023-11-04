@@ -9,8 +9,5 @@ class Topping extends Model
 {
     public $table = 'topping';
     use HasFactory;
-    protected $fillable = [
-        'name',
-        'price'
-    ];
+    protected $fillable = [];
 }

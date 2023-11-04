@@ -37,8 +37,8 @@ class PizzaToppingsFactory extends Factory
         } while(PizzaToppingsFactory::chekIds($p_id, $t_id));
 
         return [
-            'pizza_id' => $p_id,
-            'topping_id' => $t_id,
+            'fk_pizza' => $p_id,
+            'fk_topping' => $t_id,
         ];
     }
 }

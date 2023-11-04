@@ -14,20 +14,25 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pizzas', function (Blueprint $table) {
-            $table->id();
+            $table->integer('id')->unsigned()->autoIncrement();
             $table->string('size');
             $table->string('crust');
             $table->timestamps();
+            
             // constraint --> user.role = 'guest'
-            $table->foreignIdFor(User::class, 'userclient_id');
+            $table->integer('fk_client')->unsigned()->foreign('fk_client')->references('id')->on('users');
+            
             // constraint --> user.role = 'chef'
-            $table->foreignIdFor(User::class, 'chef_id')->nullable();
+            $table->integer('fk_chef')->unsigned()->foreign('fk_chef')->references('id')->on('users')->nullable();
+            
             // constraint --> status.isPizzaStatus = 1
-            $table->foreignIdFor(Status::class, 'pizza_idstatus')->nullable();
+            $table->integer('fk_pizzastatus')->unsigned()->foreign('fk_pizzastatus')->references('id')->on('status')->nullable();
+            
             // constraint --> user.role = 'deliveryman'
-            $table->foreignIdFor(User::class, 'deliveryman_id')->nullable();
+            $table->integer('fk_deliveryman')->unsigned()->foreign('fk_deliveryman')->references('id')->on('users')->nullable();
+            
             // constraint --> status.isPizzaStatus = 0
-            $table->foreignIdFor(Status::class, 'delivery_idstatus')->nullable();
+            $table->integer('fk_deliverystatus')->unsigned()->foreign('fk_deliverystatus')->references('id')->on('status')->nullable();
         });
     }
 

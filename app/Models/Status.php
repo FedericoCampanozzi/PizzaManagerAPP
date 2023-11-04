@@ -9,11 +9,7 @@ class Status extends Model
 {
     public $table = 'status';
     use HasFactory;
-    protected $fillable = [
-        'name',
-        'isPizzaStatus',
-        'sequence',
-    ];
+    protected $fillable = [];
 
     public static function getPizzaStatus():array
     {

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('topping', function (Blueprint $table) {
-            $table->id();
+            $table->integer('id')->unsigned()->autoIncrement();
             $table->string('name');
             $table->decimal('price',10,2);
             $table->timestamps();
