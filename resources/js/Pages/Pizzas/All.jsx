@@ -3,9 +3,13 @@ import { Head } from '@inertiajs/react';
 import Table from "@/Components/Table.jsx";
 
 const columns = [
+    'user name',
     'size',
-    'chef',
-    'status'
+    'toppings',
+    'pizza status',
+    'chef name',
+    'deliveryman man',
+    'delivery status'
 ];
 
 export default function All({ auth, pizzas }) {
@@ -14,7 +18,7 @@ export default function All({ auth, pizzas }) {
             user={auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Pizzas</h2>}
         >
-            <Head title="All Pizzas" />
+            <Head title="Pizzas" />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">

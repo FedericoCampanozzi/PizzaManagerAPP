@@ -21,6 +21,7 @@ class PizzaFactory extends Factory
      */
     public function definition(): array
     {
+        $clients = User::getByRole(Role::getRoleByName('guest'));
         $chefs = User::getByRole(Role::getRoleByName('chef'));
         $pizzastatues = Status::getPizzaStatus();
         
@@ -31,6 +32,7 @@ class PizzaFactory extends Factory
             'id' => rand(1111111, 9999999),
             'size' => Pizza::getSizes()[rand(0, 3)],
             'crust' => Pizza::getCrustSizes()[rand(0, 2)],
+            'userclient_id' => UtilityFunctions::pick_itm_random($clients)["id"],
             'chef_id' => UtilityFunctions::pick_itm_random($chefs)["id"],
             'pizza_idstatus' => UtilityFunctions::pick_itm_random($pizzastatues)["id"],
             'deliveryman_id' => UtilityFunctions::pick_itm_random($deliverymans)["id"],

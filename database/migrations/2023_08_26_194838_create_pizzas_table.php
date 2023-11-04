@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('size');
             $table->string('crust');
             $table->timestamps();
+            // constraint --> user.role = 'guest'
+            $table->foreignIdFor(User::class, 'userclient_id');
             // constraint --> user.role = 'chef'
             $table->foreignIdFor(User::class, 'chef_id')->nullable();
             // constraint --> status.isPizzaStatus = 1

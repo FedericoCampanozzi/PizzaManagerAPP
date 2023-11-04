@@ -9,9 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 class Pizza extends Model
 {
     use HasFactory;
+    protected $appends = [
+        'client_name'
+    ];
     /*
     protected $guarded = [];
-
+    
     protected $appends = [
         'chef_name',
         'pizza_status',
@@ -21,6 +24,10 @@ class Pizza extends Model
     ];
     protected $hidden = [];
     */
+    public function getClientNameAttribute(): string
+    {
+        return $this->belongsTo(User::class,'chef_id')->name;
+    }
     /*
     public function getChefNameAttribute(): string
     {
