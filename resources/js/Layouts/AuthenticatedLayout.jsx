@@ -7,6 +7,7 @@ import { Link } from '@inertiajs/react';
 
 export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+    const roleid = user.fk_role;
 
     return (
         <div className="min-h-screen bg-gray-100">
@@ -24,9 +25,46 @@ export default function Authenticated({ user, header, children }) {
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Dashboard
                                 </NavLink>
-                                <NavLink href={route('pizzas.index')} active={route().current('pizzas.*')}>
-                                    Pizzas
-                                </NavLink>
+                                {
+                                    roleid == 1 ?
+                                    (
+                                        <NavLink href={route('admin')} active={route().current('admin')}>
+                                            Admin Page
+                                        </NavLink>
+                                    ) : (
+                                        <></>
+                                    )
+                                }
+                                {
+                                    roleid == 2 ?
+                                    (
+                                        <NavLink href={route('worker')} active={route().current('worker')}>
+                                            Chef Page
+                                        </NavLink>
+                                    ) : (
+                                        <></>
+                                    )
+                                }
+                                {
+                                    roleid == 3 ?
+                                    (
+                                        <NavLink href={route('worker')} active={route().current('worker')}>
+                                            Deliveryman Page
+                                        </NavLink>
+                                    ) : (
+                                        <></>
+                                    )
+                                }
+                                {
+                                    roleid == 4 ?
+                                    (
+                                        <NavLink href={route('guest')} active={route().current('guest')}>
+                                            Pizzas
+                                        </NavLink>
+                                    ) : (
+                                        <></>
+                                    )
+                                }
                             </div>
                         </div>
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PizzaController;
 use App\Http\Controllers\ProfileController;
+use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -17,8 +18,28 @@ Route::get('/', function () {
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
+        return Inertia::render('Dashboards/Dashboard');
     })->name('dashboard');
+
+    Route::get('/admin', function () {
+        return Inertia::render('Dashboards/Admin',[
+            "users" => User::all()
+        ]);
+    })->name('admin');
+
+    Route::get('/guest', function () {
+        return Inertia::render('Dashboards/Guest');
+    })->name('guest');
+
+    Route::get('/worker', function () {
+        return Inertia::render('Dashboards/Worker');
+    })->name('worker');
+
+    Route::get('/editrole/{user}', function (User $user) {
+        return Inertia::render('Profile/Partials/EditRole', [
+            "edituser" => User::all()->where('id',$user->id)->first()
+        ]);
+    })->name('editrole');
 
     Route::get('/pizzas', [PizzaController::class, 'index'])->name('pizzas.index');
     Route::get('/pizzas/{pizza}', [PizzaController::class, 'edit'])->name('pizzas.edit');

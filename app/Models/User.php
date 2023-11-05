@@ -44,9 +44,18 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    protected $appends = [
+        'userole'
+    ];
+
     public function pizzas()
     {
         return $this->hasMany(Pizza::class);
+    }
+
+    public function getUseRoleAttribute(): string
+    {
+        return $this->belongsTo(Role::class,'fk_role')->get(['role_name'])->map(fn($el):string=>$el->role_name)->first();
     }
 
     public static function getByRole(Role $role):array
