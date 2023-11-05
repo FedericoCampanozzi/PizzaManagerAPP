@@ -60,7 +60,8 @@ class Pizza extends Model
 
     public function getStatusAttribute(): string
     {
-        return $this->belongsTo(Status::class,'fk_pizzastatus')->get(['name'])->map(fn($el):string=>$el->name)->first();
+        return "nope";
+        //return $this->belongsTo(Status::class,'fk_pizzastatus')->get(['name'])->map(fn($el):string=>$el->name)->first();
     }
     
     public function getDeliverymanAttribute(): string

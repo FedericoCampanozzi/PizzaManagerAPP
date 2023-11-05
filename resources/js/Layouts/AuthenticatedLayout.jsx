@@ -38,7 +38,7 @@ export default function Authenticated({ user, header, children }) {
                                 {
                                     roleid == 2 ?
                                     (
-                                        <NavLink href={route('worker')} active={route().current('worker')}>
+                                        <NavLink href={route('chef', user.id)} active={route().current('chef')}>
                                             Chef Page
                                         </NavLink>
                                     ) : (
@@ -48,7 +48,7 @@ export default function Authenticated({ user, header, children }) {
                                 {
                                     roleid == 3 ?
                                     (
-                                        <NavLink href={route('worker')} active={route().current('worker')}>
+                                        <NavLink href={route('deliveryman')} active={route().current('deliveryman')}>
                                             Deliveryman Page
                                         </NavLink>
                                     ) : (

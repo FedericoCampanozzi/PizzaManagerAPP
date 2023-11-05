@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PizzaController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Pizza;
 use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -31,9 +32,19 @@ Route::group(['middleware' => 'auth'], function () {
         return Inertia::render('Dashboards/Guest');
     })->name('guest');
 
-    Route::get('/worker', function () {
-        return Inertia::render('Dashboards/Worker');
-    })->name('worker');
+    Route::get('/chef/{user}', function (User $user) {
+        return Inertia::render('Dashboards/Worker', [
+            "isChefPage" => true,
+            "pizzas" => Pizza::all()->where("fk_pizzastatus",null)->toArray()
+        ]);
+    })->name('chef');
+
+    Route::get('/deliveryman/{user}', function (User $user) {
+        return Inertia::render('Dashboards/Worker', [
+            "isChefPage" => false,
+            "pizzas" => []
+        ]);
+    })->name('deliveryman');
 
     Route::get('/editrole/{user}', function (User $user) {
         return Inertia::render('Profile/Partials/EditRole', [
