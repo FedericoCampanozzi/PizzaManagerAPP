@@ -1,8 +1,8 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import UpdatePizzaOrderForm from "@/Pages/Pizzas/Partials/UpdatePizzaOrderForm.jsx";
+import ShowOrderDetail from "@/Pages/Pizzas/ShowOrderDetail.jsx";
 
-export default function Edit({ auth, pizza, statusOptions, toppings }) {
+export default function Edit({ auth, pizza, pizzastatues, deliverystatues, toppings }) {
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -13,9 +13,10 @@ export default function Edit({ auth, pizza, statusOptions, toppings }) {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
                     <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                        <UpdatePizzaOrderForm
+                        <ShowOrderDetail
                             pizza={pizza}
-                            statusOptions={statusOptions}
+                            pizzastatues={pizzastatues}
+                            deliverystatues={deliverystatues}
                             toppings={toppings}
                             className="max-w-xl"
                         />

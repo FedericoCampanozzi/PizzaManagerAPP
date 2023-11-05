@@ -40,6 +40,18 @@ class Pizza extends Model
         else $t = "Toppings : ".$t;
         return $t;
     }
+    
+    public function getToppingsLinearAttribute(): string
+    {
+        $t = PizzaToppings::join("topping","pizzatoppings.fk_topping","=","topping.id")
+                    ->where('fk_pizza', $this->id)
+                    ->select("topping.name","fk_pizza")
+                    ->get()
+                    ->map(fn($el):string => $el->name.' ')
+                    ->join('');
+        if ($t == '') $t = "Margherita";
+        return $t;
+    }
 
     public function getChefAttribute(): string
     {

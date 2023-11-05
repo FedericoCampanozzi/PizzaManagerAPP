@@ -9,10 +9,4 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class PublicPizzaController extends Controller
 {
-    public function show(Pizza $pizza): Response
-    {
-        return Inertia::render('Pizzas/Show', [
-            'pizza' => $pizza
-        ]);
-    }
 }

@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\PizzaController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PublicPizzaController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -15,9 +14,6 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
-
-Route::get('/order/{pizza}', [PublicPizzaController::class, 'show'])->name('public.pizzas.show');
-Route::get('/order/{pizza}/stream', [PublicPizzaController::class, 'stream'])->name('public.pizzas.stream');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', function () {

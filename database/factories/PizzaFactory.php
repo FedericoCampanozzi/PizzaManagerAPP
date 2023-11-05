@@ -28,15 +28,23 @@ class PizzaFactory extends Factory
         $deliverymans = User::getByRole(Role::getRoleByName('delivery-man'));
         $deliverystatues = Status::getDeliverymanStatus();
 
+        $rndPizzaStatus = UtilityFunctions::pick_itm_random($pizzastatues)["id"];
+        $rndDeliveryStatus = UtilityFunctions::pick_itm_random($deliverystatues)["id"];
+        $rndDeliveryman = UtilityFunctions::pick_itm_random($deliverymans)["id"];
+
+        if($rndPizzaStatus != 3){
+            $rndDeliveryStatus = null;
+            $rndDeliveryman = null;
+        }
         return [
             'id' => rand(1111111, 9999999),
             'size' => Pizza::getSizes()[rand(0, 3)],
             'crust' => Pizza::getCrustSizes()[rand(0, 2)],
             'fk_client' => UtilityFunctions::pick_itm_random($clients)["id"],
             'fk_chef' => UtilityFunctions::pick_itm_random($chefs)["id"],
-            'fk_pizzastatus' => UtilityFunctions::pick_itm_random($pizzastatues)["id"],
-            'fk_deliveryman' => UtilityFunctions::pick_itm_random($deliverymans)["id"],
-            'fk_deliverystatus' => UtilityFunctions::pick_itm_random($deliverystatues)["id"],
+            'fk_pizzastatus' => $rndPizzaStatus,
+            'fk_deliveryman' => $rndDeliveryman,
+            'fk_deliverystatus' => $rndDeliveryStatus,
         ];
     }
 }
