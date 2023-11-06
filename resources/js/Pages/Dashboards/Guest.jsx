@@ -6,10 +6,18 @@ import TextInput from '@/Components/TextInput';
 import { useForm } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 import InputError from "@/Components/InputError";
-import SelectInputWithCombo from "@/Components/SelectInputWithCombo";
+import ComboSelect from 'react-combo-select';
 
 export default function GuestDashboard({ auth, pizzas, toppings }) {
-    toppings = ["a","b"];
+
+    console.log(pizzas);
+
+    const ComboProps = {
+        scrollHeight: 200, // number
+        preferredDirection: 'down' // 'top' | 'down'
+    };
+
+    toppings = ["a", "b", "c", "d", "e"];
 
     let pizza = {
         size : "size",
@@ -24,9 +32,27 @@ export default function GuestDashboard({ auth, pizzas, toppings }) {
     });
 
     const submit = (e) => {
-        //e.preventDefault();
+        e.preventDefault();
         //patch(route('pizzas.update', pizza.id));
     };
+
+    const onToggle = (open, value, text) => {
+        window.addEventListener('touchstart', function(event) {
+            // some logic
+            event.preventDefault(); // <-- that should not be used in passive
+            // some other magic
+        });
+        console.log(open, value, text);
+    }
+
+    const onChange = (value, text) => {
+        window.addEventListener('touchstart', function(event) {
+            // some logic
+            event.preventDefault(); // <-- that should not be used in passive
+            // some other magic
+        });
+        console.log(value, text);
+    }
 
     return (
         <>
@@ -41,6 +67,7 @@ export default function GuestDashboard({ auth, pizzas, toppings }) {
                 <div className="py-12">
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                            <All pizzas={pizzas} />
                         </div>
                     </div>
                     <div className="p-5 max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -48,7 +75,7 @@ export default function GuestDashboard({ auth, pizzas, toppings }) {
                         
 
 
-                            <section className="max-w-xl p-10">
+                            <section className="max-w-xl p-10 pb-100">
                                 <header>
                                     <h2 className="text-lg font-medium text-gray-900">
                                         Order a Pizza
@@ -85,16 +112,11 @@ export default function GuestDashboard({ auth, pizzas, toppings }) {
                                     <div>
                                         <InputLabel htmlFor="toppings" value="toppings" />
 
-                                        <SelectInputWithCombo
-                                            id="role"
-                                            className="mt-1 block w-full"
-                                            options={toppings}
-                                            //value={}
-                                            //onChange={(e) => setData('role', e.target.value)}
-                                            disabled
-                                        />
-
-                                        <InputError className="mt-2" message={errors.role} />
+                                        <ComboSelect    data={toppings} 
+                                                        text="No toppings :("
+                                                        onChange={onChange}
+                                                        onToggle={onToggle}
+                                                        type="multiselect" {...ComboProps}/>
                                     </div>
 
                                     <div className="flex items-center gap-4">
