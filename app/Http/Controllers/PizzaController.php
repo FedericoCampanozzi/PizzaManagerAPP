@@ -19,7 +19,7 @@ class PizzaController extends Controller
         ]);
     }
 
-    public function edit(Pizza $pizza): Response
+    public function detail(Pizza $pizza): Response
     {
         $pizzastatues = Status::all()
                             ->where('isPizzaStatus', true)
@@ -31,7 +31,7 @@ class PizzaController extends Controller
                             ->map(fn($el):string => $el->name)
                             ->values()                            
                             ->toArray();
-        return Inertia::render('Pizzas/Edit', [
+        return Inertia::render('Pizzas/ShowOrderDetail', [
             'pizza' => $pizza,
             'pizzastatues' => $pizzastatues,
             'deliverystatues' => $deliverystatues,

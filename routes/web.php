@@ -32,7 +32,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/guest/{user}', function (User $user) {
         return Inertia::render('Dashboards/Guest', [
-            "pizzas" => Pizza::all()->where("fk_client", $user->id)
+            "pizzas" => Pizza::all()->where("fk_client", $user->id)->flatten()->toArray()
         ]);
     })->name('guest');
 
@@ -81,7 +81,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     //Route::get('/pizzas', [PizzaController::class, 'index'])->name('pizzas.index');
     //Route::get('/guest', [PizzaController::class, 'index'])->name('pizzas.index');
-    //Route::get('/pizzas/{pizza}', [PizzaController::class, 'edit'])->name('pizzas.edit');
+    Route::get('/pizzas/{pizza}', [PizzaController::class, 'detail'])->name('pizzas.showorderdetail');
     //Route::patch('/pizzas/{pizza}', [PizzaController::class, 'update'])->name('pizzas.update');
 
     Route::patch('/editrole/{user}', [ProfileController::class, 'update_role'])->name('user_role.update');

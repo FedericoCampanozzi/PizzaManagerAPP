@@ -1,6 +1,8 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import ShowOrderDetail from "@/Pages/Pizzas/ShowOrderDetail.jsx";
+import ShowStatus from './Partials/ShowStatus';
+import InputLabel from '@/Components/InputLabel';
+import TextInput from '@/Components/TextInput';
 
 export default function ShowOrderDetail({ auth, pizza, pizzastatues, deliverystatues, toppings }) {
     return (
