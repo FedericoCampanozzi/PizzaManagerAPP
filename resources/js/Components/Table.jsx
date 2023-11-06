@@ -1,4 +1,4 @@
-export default function Table({ items, columns, primary, action }) {
+export default function Table({ items, columns, primary, action, actionlabel="View Details" }) {
     return (
         <div className="relative overflow-x-auto border shadow-md sm:rounded-lg">
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -25,7 +25,7 @@ export default function Table({ items, columns, primary, action }) {
                         {
                             action != null?(
                                 <td className="px-6 py-4">
-                                    <a href={route(action, item.id)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">View Details</a>
+                                    <a href={route(action, item.id)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">{actionlabel}</a>
                                 </td>
                             ) : (
                                 <></>

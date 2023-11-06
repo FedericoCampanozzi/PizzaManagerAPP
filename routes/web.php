@@ -3,6 +3,7 @@
 use App\Http\Controllers\PizzaController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Pizza;
+use App\Models\Status;
 use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -28,21 +29,35 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     })->name('admin');
 
-    Route::get('/guest', function () {
-        return Inertia::render('Dashboards/Guest');
+    Route::get('/guest/{user}', function (User $user) {
+        var_dump($user->id);
+        var_dump(Pizza::all()->where("fk_client", $user->id)->toArray());
+        return Inertia::render('Dashboards/Guest', [
+            "pizzas" => Pizza::all()->where("fk_client", $user->id)->get(0)->toArray()
+        ]);
     })->name('guest');
 
     Route::get('/chef/{user}', function (User $user) {
+        $status = null;
+        $userid = $user->id;
         return Inertia::render('Dashboards/Worker', [
             "isChefPage" => true,
-            "pizzas" => Pizza::all()->where("fk_pizzastatus",null)->toArray()
+            "pizzas" => Pizza::all()->where(function ($query) use ($status,$userid) {
+                return $query->where('fk_pizzastatus', '=', $status)
+                      ->orWhere('fk_chef', '=', $userid);
+            } )->toArray()
         ]);
     })->name('chef');
 
     Route::get('/deliveryman/{user}', function (User $user) {
+        $status = null;
+        $userid = $user->id;
         return Inertia::render('Dashboards/Worker', [
             "isChefPage" => false,
-            "pizzas" => []
+            "pizzas" => Pizza::all()->where(function ($query) use ($status,$userid) {
+                return $query->where('fk_pizzastatus', '=', $status)
+                      ->orWhere('fk_chef', '=', $userid);
+            } )->toArray()
         ]);
     })->name('deliveryman');
 
@@ -52,9 +67,22 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     })->name('editrole');
 
-    Route::get('/pizzas', [PizzaController::class, 'index'])->name('pizzas.index');
-    Route::get('/pizzas/{pizza}', [PizzaController::class, 'edit'])->name('pizzas.edit');
-    Route::patch('/pizzas/{pizza}', [PizzaController::class, 'update'])->name('pizzas.update');
+    Route::get('/editchef', function () {
+        return Inertia::render('Pizzas/EditPizzaStatus', [
+            "statues" => Status::getPizzaStatus()
+        ]);
+    })->name('editchef');
+
+    Route::get('/editdeliveryman', function () {
+        return Inertia::render('Pizzas/EditPizzaStatus', [
+            "statues" => Status::getDeliverymanStatus()
+        ]);
+    })->name('editdeliveryman');
+
+    //Route::get('/pizzas', [PizzaController::class, 'index'])->name('pizzas.index');
+    //Route::get('/guest', [PizzaController::class, 'index'])->name('pizzas.index');
+    //Route::get('/pizzas/{pizza}', [PizzaController::class, 'edit'])->name('pizzas.edit');
+    //Route::patch('/pizzas/{pizza}', [PizzaController::class, 'update'])->name('pizzas.update');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

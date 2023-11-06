@@ -18,7 +18,8 @@ export default function AdminDashboard({ auth, users }) {
                             <Table  items={users} 
                                     primary="User ID" 
                                     columns={['name','email','userole']} 
-                                    action="editrole"/>
+                                    action="editrole"
+                                    actionlabel='Edit Role'/>
                         </div>
                     </div>
                 </div>

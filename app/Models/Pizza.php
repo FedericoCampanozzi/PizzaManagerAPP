@@ -55,23 +55,26 @@ class Pizza extends Model
 
     public function getChefAttribute(): string
     {
-        return $this->belongsTo(User::class,'fk_chef')->get(['name'])->map(fn($el):string=>$el->name)->first();
+        //return $this->belongsTo(User::class,'fk_chef')->get(['name'])->map(fn($el):string=>$el->name)->first();
+        return $this->computeBelongsToName(User::class,'fk_chef', '');
     }
 
     public function getStatusAttribute(): string
     {
-        return "nope";
         //return $this->belongsTo(Status::class,'fk_pizzastatus')->get(['name'])->map(fn($el):string=>$el->name)->first();
+        return $this->computeBelongsToName(Status::class,'fk_pizzastatus', '');
     }
     
     public function getDeliverymanAttribute(): string
     {
-        return $this->belongsTo(User::class,'fk_deliveryman')->get(['name'])->map(fn($el):string=>$el->name)->first();
+        //return $this->belongsTo(User::class,'fk_deliveryman')->get(['name'])->map(fn($el):string=>$el->name)->first();
+        return $this->computeBelongsToName(User::class,'fk_deliveryman', '');
     }
 
     public function getDeliveryAttribute(): string
     {
-        return $this->belongsTo(Status::class,'fk_deliverystatus')->get(['name'])->map(fn($el):string=>$el->name)->first();
+        //return $this->belongsTo(Status::class,'fk_deliverystatus')->get(['name'])->map(fn($el):string=>$el->name)->first();
+        return $this->computeBelongsToName(Status::class,'fk_deliverystatus', '');
     }
 
     public function getLastUpdatedAttribute(): string
@@ -87,5 +90,12 @@ class Pizza extends Model
     public static function getCrustSizes():array
     {
         return ['Regular', 'Thin', 'Garlic'];
+    }
+
+    private function computeBelongsToName(string $class, string $clm, string $defaultValue):string
+    {
+        $value = $this->belongsTo($class,$clm)->get(['name'])->map(fn($el):string=>$el->name);
+        if(count($value) == 0) return $defaultValue;
+        else return $value->first();
     }
 }

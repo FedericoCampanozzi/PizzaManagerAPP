@@ -5,8 +5,8 @@ const columns = [
     'client',
     'size',
     'toppings',
-    'status',
     'chef',
+    'status',
     'deliveryman',
     'delivery'
 ];
@@ -29,14 +29,18 @@ export default function GuerstDashboard({ auth, pizzas }) {
                             {
                                 auth.user.fk_role == 2 ?
                                 (
-                                    <Table items={pizzas} 
+                                    <Table  items={pizzas} 
                                             columns={columns} 
-                                            primary="Order Number"  />
+                                            primary="Order Number"
+                                            action="editchef"
+                                            actionlabel="Edit Status" />
 
                                 ) : (
-                                    <Table items={pizzas} 
-                                            columns={columns} 
-                                            primary="Order Number"  />
+                                    <Table  items={pizzas}
+                                            columns={columns}
+                                            primary="Order Number"
+                                            action="editdeliveryman"
+                                            actionlabel="Edit Status" />
                                 )
                             }
                         </div>
