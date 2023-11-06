@@ -3,6 +3,7 @@
 use App\Http\Controllers\PizzaController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Pizza;
+use App\Models\Role;
 use App\Models\Status;
 use App\Models\User;
 use Illuminate\Foundation\Application;
@@ -30,10 +31,8 @@ Route::group(['middleware' => 'auth'], function () {
     })->name('admin');
 
     Route::get('/guest/{user}', function (User $user) {
-        var_dump($user->id);
-        var_dump(Pizza::all()->where("fk_client", $user->id)->toArray());
         return Inertia::render('Dashboards/Guest', [
-            "pizzas" => Pizza::all()->where("fk_client", $user->id)->get(0)->toArray()
+            "pizzas" => Pizza::all()->where("fk_client", $user->id)
         ]);
     })->name('guest');
 
@@ -63,7 +62,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/editrole/{user}', function (User $user) {
         return Inertia::render('Profile/Partials/EditRole', [
-            "edituser" => User::all()->where('id',$user->id)->first()
+            "edituser" => User::all()->where('id',$user->id)->first(),
+            "options" => Role::all()->map(fn($el):string=>$el->role_name)
         ]);
     })->name('editrole');
 
@@ -83,6 +83,8 @@ Route::group(['middleware' => 'auth'], function () {
     //Route::get('/guest', [PizzaController::class, 'index'])->name('pizzas.index');
     //Route::get('/pizzas/{pizza}', [PizzaController::class, 'edit'])->name('pizzas.edit');
     //Route::patch('/pizzas/{pizza}', [PizzaController::class, 'update'])->name('pizzas.update');
+
+    Route::patch('/editrole/{user}', [ProfileController::class, 'update_role'])->name('user_role.update');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -5,17 +5,22 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { useForm } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
+import InputError from "@/Components/InputError";
+import SelectInputWithCombo from "@/Components/SelectInputWithCombo";
 
-export default function GuestDashboard({ auth, pizzas }) {
-    const pizza = pizzas[0];
-    console.log(pizzas);
-    console.log(pizza);
+export default function GuestDashboard({ auth, pizzas, toppings }) {
+    toppings = ["a","b"];
 
-    const { data, patch, processing, recentlySuccessful } = useForm({
-        size: "",
-        crust: "",
-        toppings: "",
-        status: "ordered"
+    let pizza = {
+        size : "size",
+        crust : "crush",
+        toppings : " ",
+    };
+    
+    const { data, patch, setData, processing, errors, recentlySuccessful } = useForm({
+        size: pizza.size,
+        crust: pizza.crust,
+        toppings: pizza.toppings,
     });
 
     const submit = (e) => {
@@ -23,7 +28,6 @@ export default function GuestDashboard({ auth, pizzas }) {
         //patch(route('pizzas.update', pizza.id));
     };
 
-    // section made in another page
     return (
         <>
             <AuthenticatedLayout
@@ -44,12 +48,14 @@ export default function GuestDashboard({ auth, pizzas }) {
                         
 
 
-                            <section className="max-w-xl">
+                            <section className="max-w-xl p-10">
                                 <header>
-                                    <h2 className="text-lg font-medium text-gray-900">Order Information</h2>
+                                    <h2 className="text-lg font-medium text-gray-900">
+                                        Order a Pizza
+                                    </h2>
 
                                     <p className="mt-1 text-sm text-gray-600">
-                                        Order a Pizza
+                                        
                                     </p>
                                 </header>
 
@@ -61,6 +67,7 @@ export default function GuestDashboard({ auth, pizzas }) {
                                             id="size"
                                             className="mt-1 block w-full"
                                             value={data.size}
+                                            onChange={(e) => setData('size', e.target.value)}
                                         />
                                     </div>
 
@@ -71,17 +78,23 @@ export default function GuestDashboard({ auth, pizzas }) {
                                             id="crust"
                                             className="mt-1 block w-full"
                                             value={data.crust}
+                                            onChange={(e) => setData('crust', e.target.value)}
                                         />
                                     </div>
 
                                     <div>
-                                        <InputLabel htmlFor="toppings" value="Toppings" />
+                                        <InputLabel htmlFor="toppings" value="toppings" />
 
-                                        <TextInput
-                                            id="name"
+                                        <SelectInputWithCombo
+                                            id="role"
                                             className="mt-1 block w-full"
-                                            value={data.toppings}
+                                            options={toppings}
+                                            //value={}
+                                            //onChange={(e) => setData('role', e.target.value)}
+                                            disabled
                                         />
+
+                                        <InputError className="mt-2" message={errors.role} />
                                     </div>
 
                                     <div className="flex items-center gap-4">

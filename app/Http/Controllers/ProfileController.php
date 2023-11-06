@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -38,6 +40,24 @@ class ProfileController extends Controller
         $request->user()->save();
 
         return Redirect::route('profile.edit');
+    }
+    
+    public function update_role(User $user, Request $request): RedirectResponse
+    {
+        $upd = $user->updateOrFail([
+            'fk_role' => Role::getRoleByName($request->role)->id
+        ]);
+
+        //$user->save();
+
+        /*return Redirect::to('/admin');*/
+        return Redirect::to('/admin', 302, [
+            'bho1' => Role::getRoleByName($request->role)->id,
+            'bho2' => Role::getRoleByName($request->role),
+            'bho3' => $request->role,
+            'bho4' => $user,
+            'bho5' => $upd
+        ]);
     }
 
     /**
