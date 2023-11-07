@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+            $table->timestamps('holidays_start')->nullable();
+            $table->timestamps('holidays_end')->nullable();
             $table->integer('fk_role')->unsigned()->default(4)->foreign('fk_role')->references('id')->on('role');
         });
     }
