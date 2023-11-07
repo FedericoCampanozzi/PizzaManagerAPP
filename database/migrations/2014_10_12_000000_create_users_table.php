@@ -19,10 +19,10 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->timestamps();
-            $table->timestamps('holidays_start')->nullable();
-            $table->timestamps('holidays_end')->nullable();
+            $table->dateTime('holidays_start')->nullable();
+            $table->dateTime('holidays_end')->nullable();
             $table->integer('fk_role')->unsigned()->default(4)->foreign('fk_role')->references('id')->on('role');
+            $table->timestamps();
         });
     }
 

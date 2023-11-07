@@ -7,38 +7,57 @@ use App\Models\Topping;
 use App\Utils\UtilityFunctions;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PizzaToppings>
- */
 class PizzaToppingsFactory extends Factory
 {
-    private static $ids = [];
+    private static $pindex = -1;
+    private static $tindex = -1;
+    private static $indexes = [];
+    private static $indexes_pizza = [];
+    private static $indexes_toppings = [];
 
-    private static function chekIds($pizzaid, $toppingid){
-        $f = array_search($pizzaid."".$toppingid, self::$ids);
-        if(!$f) array_push(self::$ids,$pizzaid."".$toppingid);
-        return $f;
+    public static function get_current_pizza_id(): int
+    {
+        self::$pindex++;
+        return self::$indexes_pizza[self::$pindex];
     }
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition(): array
+
+    public static function get_current_toppings_id(): int
+    {
+        self::$tindex++;
+        return self::$indexes_toppings[self::$tindex];
+    }
+
+    public static function pre_init_indexes($array_length): void
     {
         $pizzas = Pizza::all()->toArray();
         $toppings = Topping::all()->toArray();
         $p_id = -1;
         $t_id = -1;
-        
-        do{
-           $p_id = UtilityFunctions::pick_itm_random($pizzas)["id"];
-           $t_id = UtilityFunctions::pick_itm_random($toppings)["id"];
-        } while(PizzaToppingsFactory::chekIds($p_id, $t_id));
+        for($i=0; $i < $array_length; $i++) {
+            do {
+               $p_id = UtilityFunctions::pick_itm_random($pizzas)["id"];
+               $t_id = UtilityFunctions::pick_itm_random($toppings)["id"];
+            } while(PizzaToppingsFactory::chekIds($p_id, $t_id));
+        }        
+    }
 
+    private static function chekIds($pizzaid, $toppingid) {
+        $key = $pizzaid * 10000 + $toppingid;
+        $find = array_search($key, self::$indexes);
+        if(!$find) {
+            array_push(self::$indexes, $key);
+            array_push(self::$indexes_pizza, $pizzaid);
+            array_push(self::$indexes_toppings, $toppingid);
+        }
+        return $find;
+    }
+
+    public function definition(): array
+    {
         return [
-            'fk_pizza' => $p_id,
-            'fk_topping' => $t_id,
+            'fk_pizza' => PizzaToppingsFactory::get_current_pizza_id(),
+            'fk_topping' => PizzaToppingsFactory::get_current_toppings_id(),
+            'inserted' => fake()->dateTimeBetween('-1 years')
         ];
     }
 }

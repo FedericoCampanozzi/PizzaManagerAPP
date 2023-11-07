@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Utils\UtilityFunctions;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ToppingFactory extends Factory
@@ -14,8 +15,8 @@ class ToppingFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'=>fake()->unique()->word,
-            'price'=>rand(20, 200)/100.0 // 0.20 2.00
+            'name' => UtilityFunctions::get_fake_food(),
+            'price' => rand(20, 200)/100.0 // 0.20 -> 2.00
         ];
     }
 }

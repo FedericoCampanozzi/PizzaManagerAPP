@@ -37,7 +37,6 @@ class PizzaFactory extends Factory
             $rndDeliveryman = null;
         }
         return [
-            'id' => rand(1111111, 9999999),
             'size' => Pizza::getSizes()[rand(0, 3)],
             'crust' => Pizza::getCrustSizes()[rand(0, 2)],
             'fk_client' => UtilityFunctions::pick_itm_random($clients)["id"],
@@ -45,6 +44,7 @@ class PizzaFactory extends Factory
             'fk_pizzastatus' => $rndPizzaStatus,
             'fk_deliveryman' => $rndDeliveryman,
             'fk_deliverystatus' => $rndDeliveryStatus,
+            'ordered' => fake()->dateTimeBetween('-1 years')
         ];
     }
 }

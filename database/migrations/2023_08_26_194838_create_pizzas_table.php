@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('id')->unsigned()->autoIncrement();
             $table->string('size');
             $table->string('crust');
-            $table->timestamps();
+            $table->dateTime('ordered');
             
             // constraint --> user.role = 'guest'
             $table->integer('fk_client')->unsigned()->foreign('fk_client')->references('id')->on('users');
@@ -33,6 +33,8 @@ return new class extends Migration
             
             // constraint --> status.isPizzaStatus = 0
             $table->integer('fk_deliverystatus')->unsigned()->foreign('fk_deliverystatus')->references('id')->on('status')->nullable();
+            
+            $table->timestamps();
         });
     }
 

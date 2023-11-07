@@ -16,8 +16,9 @@ return new class extends Migration
         Schema::create('pizzatoppings', function (Blueprint $table) {
             $table->integer('fk_pizza')->unsigned()->foreign('fk_pizza')->references('id')->on('pizzas');
             $table->integer('fk_topping')->unsigned()->foreign('fk_topping')->references('id')->on('topping');
-            $table->primary(['fk_pizza','fk_topping']);
+            $table->dateTime('inserted');
             $table->timestamps();
+            $table->primary(['fk_pizza','fk_topping']);
         });
     }
 
