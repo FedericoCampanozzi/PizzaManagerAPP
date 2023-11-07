@@ -6,6 +6,7 @@ use App\Models\Pizza;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -26,8 +27,19 @@ Route::group(['middleware' => 'auth'], function () {
     })->name('dashboard');
 
     Route::get('/admin', function () {
+        $sql = "
+                select  fk_chef, users.name, weekofyear(pizzas.ordered) as nr_week, count(*) as nr_pizzas
+                from    pizzas inner join users on pizzas.fk_chef = users.id
+                where   year(pizzas.ordered) = year(CURDATE()) and fk_chef = 1
+                group   by fk_chef, users.name, weekofyear(pizzas.ordered)
+                order   by fk_chef, users.name, weekofyear(pizzas.ordered) DESC
+        ";
+        $col = (new Collection(DB::select($sql)));
+    
         return Inertia::render('Dashboards/Admin',[
-            "users" => User::all()
+            "users" => User::all(),
+            "datasets_chef_weekly" => (new Collection(DB::select($sql)))->map(fn($el):int => $el->nr_pizzas)->toArray()
+            //"datasts_chef_weekly" => DB::select($sql)
         ]);
     })->name('admin');
 

@@ -1,73 +1,110 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import React from "react";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Table from "@/Components/Table.jsx";
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-
+import timeGridPlugin from "@fullcalendar/timegrid";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  BarElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend,
 } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  BarElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend
 );
 
-const events = [
-  { title: 'Meeting', start: new Date() }
-]
+const events = [{ title: "Meeting", start: new Date(2023,10,6), end: new Date(2023,10,9) }];
 
-export default function AdminDashboard({ auth, users }) {
-   
- const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'Chart.js Bar Chart',
-      },
-    },
+const get_options = (gfx_title) => {
+    return {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: "top",
+            },
+            title: {
+                display: true,
+                text: gfx_title,
+            },
+        },
+    };
+};
+
+const get_data = (labels, datasets) => {
+    return {
+      labels: ["a", "b", "c"],
+      datasets: [
+          {
+            label: 'Cory Luettgen Sr.',
+            data: [1,2,3],
+            borderColor: 'rgb(53, 162, 235)',
+            backgroundColor: 'rgba(53, 162, 235, 0.5)',
+          },
+          {
+            label: 'Cory Luettgen Sr.',
+            data: [4,12,13],
+            borderColor: 'rgb(53, 162, 235)',
+            backgroundColor: 'rgba(53, 162, 235, 0.5)',
+          }]
+    };
+};
+
+/* calendar callback */
+const handleEventReceive = (eventInfo) => {
+  const newEvent = {
+    id: eventInfo.draggedEl.getAttribute("data-id"),
+    title: eventInfo.draggedEl.getAttribute("title"),
+    color: eventInfo.draggedEl.getAttribute("data-color"),
+    start: eventInfo.date,
+    end: eventInfo.date,
+    custom: eventInfo.draggedEl.getAttribute("data-custom")
   };
-  
-  const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-  
-   const data = {
-    labels,
-    datasets: [
-      {
-        label: 'Dataset 1',
-        data: [1,2,3,45,6,7,8],
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-      },
-      {
-        label: 'Dataset 2',
-        data: [1,2,3,45,6,7,8],
-        backgroundColor: 'rgba(53, 162, 235, 0.5)',
-      },
-    ],
-  };
-    
-    const handleDateClick = (arg) => { // bind with an arrow function
-        alert(arg.dateStr);
-    }
-    const eventClick = (arg) => { // bind with an arrow function
-        console.log(arg);
-        alert(arg);
-    }
+
+  //console.log(eventInfo);
+  /*
+  setState((state) => {
+    return {
+      ...state,
+      calendarEvents: state.calendarEvents.concat(newEvent)
+    };
+  });*/
+};
+/* **************** */
+
+
+
+export default function AdminDashboard({
+    auth,
+    users,
+    datasets_chef_weekly,
+    gfx_chef_monthly,
+    gfx_deliveryman_weekly,
+    gfx_deliveryman_monthly
+}) {
+    const [activeView, setActiveView] = React.useState("timeGridDay");
+    const calendarRef = React.useRef(null);
+
+    React.useEffect(() => {
+      //console.log("View Changed", activeView);
+      const { current: calendarDom } = calendarRef;
+      const API = calendarDom ? calendarDom.getApi() : null;
+      API && API.changeView(activeView);
+    }, [activeView]);
+    //console.log(datasets_chef_weekly);
     return (
         <>
             <AuthenticatedLayout
@@ -81,73 +118,94 @@ export default function AdminDashboard({ auth, users }) {
                 <div className="py-12">
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                            <Table  items={users} 
-                                    primary="User ID" 
-                                    columns={['name','email','userole']} 
-                                    action="editrole"
-                                    actionlabel='Edit Role'/>
-                        </div>                        
+                            <Table
+                                items={users}
+                                primary="User ID"
+                                columns={["name", "email", "userole"]}
+                                action="editrole"
+                                actionlabel="Edit Role"
+                            />
+                        </div>
                     </div>
                 </div>
 
                 <div className="py-12">
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                            <div className='p-5' style={{
-                                    width:'50%',
-                                    float:'left',
-                                    height:'auto'}}>
-                                <Bar options={options} data={data} />
+                            <div
+                                className="p-5"
+                                style={{
+                                    //width: "50%",
+                                    //float: "left",
+                                    //height: "auto",
+                                }}
+                            >
+                                <Line  options={get_options("Chef Weekly")} 
+                                       data={get_data(datasets_chef_weekly)} />
                             </div>
-                            <div className='p-5' style={{
-                                    width:'50%',
-                                    float:'right',
-                                    height:'auto'}}>
-                                <Bar options={options} data={data} />
+                            <div
+                                className="p-5"
+                                style={{
+                                    width: "50%",
+                                    float: "right",
+                                    height: "auto",
+                                }}
+                            >
+                                
                             </div>
-                            <div className='p-5' style={{
-                                    width:'50%',
-                                    float:'left',
-                                    height:'auto'}}>
-                                <Bar options={options} data={data} />
+                            <div
+                                className="p-5"
+                                style={{
+                                    width: "50%",
+                                    float: "left",
+                                    height: "auto",
+                                }}
+                            >
+                                
                             </div>
-                            <div className='p-5' style={{
-                                    width:'50%',
-                                    float:'right',
-                                    height:'auto'}}>
-                                <Bar options={options} data={data} />
+                            <div
+                                className="p-5"
+                                style={{
+                                    width: "50%",
+                                    float: "right",
+                                    height: "auto",
+                                }}
+                            >
+                                
                             </div>
-                        </div>                        
+                        </div>
                     </div>
                 </div>
-                
+
                 <div className="py-12">
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                            <div className='p-10'>
+                            <div className="p-10">
                                 <FullCalendar
-                                    plugins={[dayGridPlugin, interactionPlugin]}
-                                    initialView='dayGridMonth'
+                                    plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                                    headerToolbar={{
+                                      left: "prev,next today",
+                                      center: "title",
+                                      right: "dayGridMonth,timeGridWeek,timeGridDay"
+                                    }}
+                                    initialView="dayGridMonth"
+                                    editable={true}
+                                    selectable={true}
+                                    selectMirror={true}
+                                    dayMaxEvents={true}
                                     weekends={true}
                                     events={events}
-                                    eventClick={eventClick}
-                                    dateClick={handleDateClick}
-                                    eventContent={renderEventContent}/>
+                                    droppable={true}
+                                    eventReceive={handleEventReceive}
+                                    locale={'it-IT'}
+                                    eventDragStart={(e)=>console.log("event start",e)}
+                                    eventDragStop={(e)=>console.log("event end",e)}
+                                />
                             </div>
-                        </div>                        
+                        </div>
                     </div>
                 </div>
-
             </AuthenticatedLayout>
         </>
     );
-}
-
-function renderEventContent(eventInfo) {
-    return (
-      <>
-        <b>{eventInfo.timeText}</b>
-        <i>{eventInfo.event.title}</i>
-      </>
-    )
 }
