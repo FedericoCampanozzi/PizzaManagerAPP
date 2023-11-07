@@ -1,11 +1,9 @@
-import All from "@/Pages/Pizzas/All";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { useForm } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
-import InputError from "@/Components/InputError";
 import ComboSelect from 'react-combo-select';
 
 export default function GuestDashboard({ auth, pizzas, toppings }) {
@@ -66,8 +64,20 @@ export default function GuestDashboard({ auth, pizzas, toppings }) {
             >
                 <div className="py-12">
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                        <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                            <All pizzas={pizzas} />
+                        <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">                           
+                            <Table  items={pizzas} 
+                                    columns={[
+                                        'client',
+                                        'size',
+                                        'toppings',
+                                        'status',
+                                        'chef',
+                                        'deliveryman',
+                                        'delivery'
+                                    ]} 
+                                    primary="Order Number" 
+                                    action="pizzas.showorderdetail"
+                                    noResultLabel="You didn't order any pizzas" />                                    
                         </div>
                     </div>
                     <div className="p-5 max-w-7xl mx-auto sm:px-6 lg:px-8">

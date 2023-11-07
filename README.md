@@ -23,6 +23,10 @@ Clone this repo and run the following commands to install the dependencies and s
     4. if guest => can see mine pizzas and their states (show.jsx) (fk_client = *my_id*) or put a new order
 - put a button in table that change the next state (*id_state* += 1) [pt. 2 and 3]
 - put nice toppings label
+- in admin page implement:
+    1. a calendar that shows worker holidays
+    2. a line-chart that shows dayly and weekly order
+    3. a bar-chart that shows dayly and weekly taking for each chef and delivery man
 
 ---------------------------------------------------------
 ## Done

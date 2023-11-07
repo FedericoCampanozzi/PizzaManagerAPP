@@ -1,3 +1,5 @@
+import NavLink from "./NavLink";
+
 export default function Table({ items, columns, primary, action, actionlabel="View Details", noResultLabel="Zero Result" }) {
     return (
         <div className="relative overflow-x-auto border shadow-md sm:rounded-lg">
@@ -36,7 +38,10 @@ export default function Table({ items, columns, primary, action, actionlabel="Vi
                         {
                             action != null?(
                                 <td className="px-6 py-4">
-                                    <a href={route(action, item.id)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">{actionlabel}</a>
+                                    <NavLink href={route(action, item.id)} active={route().current(action)}
+                                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                        {actionlabel}
+                                    </NavLink>
                                 </td>
                             ) : (
                                 <></>
