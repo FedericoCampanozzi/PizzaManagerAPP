@@ -17,6 +17,7 @@ class Pizza extends Model
     protected $appends = [
         'client',
         'toppings',
+        'aaaa',
         'chef',
         'status',
         'deliveryman',
@@ -25,7 +26,9 @@ class Pizza extends Model
 
     public function getClientAttribute(): string
     {
-        return $this->belongsTo(User::class,'fk_client')->get(['name'])->map(fn($el):string=>$el->name)->first();
+        //var_dump($this->hasOne(Pizza::class,'fk_client')->first()->toArray());
+        return "asdasdsdas";
+        //return $this->belongsTo(User::class,'fk_client')->get(['name'])->map(fn($el):string=>$el->name)->first();
     }
     
     public function getToppingsAttribute(): string
@@ -53,6 +56,11 @@ class Pizza extends Model
         return $t;
     }
 
+    public function getAaaaAttribute(): string
+    {
+        return $this->getToppingsLinearAttribute();
+    }
+
     public function getChefAttribute(): string
     {
         //return $this->belongsTo(User::class,'fk_chef')->get(['name'])->map(fn($el):string=>$el->name)->first();
@@ -75,11 +83,6 @@ class Pizza extends Model
     {
         //return $this->belongsTo(Status::class,'fk_deliverystatus')->get(['name'])->map(fn($el):string=>$el->name)->first();
         return $this->computeBelongsToName(Status::class,'fk_deliverystatus', '');
-    }
-
-    public function getLastUpdatedAttribute(): string
-    {
-        return $this->updated_at->diffForHumans();
     }
     
     public static function getSizes():array

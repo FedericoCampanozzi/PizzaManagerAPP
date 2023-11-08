@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Models\Pizza;
 use App\Models\Role;
 use App\Models\Status;
+use App\Models\Topping;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Application;
@@ -27,25 +28,75 @@ Route::group(['middleware' => 'auth'], function () {
     })->name('dashboard');
 
     Route::get('/admin', function () {
-        $sql = "
+        $sql_1 = "
+                select  *
+                from    users
+                where   fk_role = ?
+        ";
+        $sql_2 = "
                 select  fk_chef, users.name, weekofyear(pizzas.ordered) as nr_week, count(*) as nr_pizzas
                 from    pizzas inner join users on pizzas.fk_chef = users.id
-                where   year(pizzas.ordered) = year(CURDATE()) and fk_chef = 1
+                where   year(pizzas.ordered) = 2023 and fk_chef = ?
                 group   by fk_chef, users.name, weekofyear(pizzas.ordered)
                 order   by fk_chef, users.name, weekofyear(pizzas.ordered) DESC
         ";
-        $col = (new Collection(DB::select($sql)));
-    
+
+        $chef_wd = [];
+        foreach(DB::select($sql_1, [2]) as $chef){
+            array_push($chef_wd, (object)[
+                "label" => $chef->name,
+                "data" => (new Collection(DB::select($sql_2, [$chef->id])))->map(fn($e):int => $e->nr_pizzas)->toArray(),
+                "borderColor" => $chef->color,
+                "backgroundColor" => $chef->color.'ff'
+            ]);
+        }
+
+        $chef_md = [];
+        $chef_md_stack = [];
+        foreach(DB::select($sql_1, [2]) as $chef){
+            array_push($chef_md, (object)[
+                "label" => $chef->name,
+                "data" => (new Collection(DB::select($sql_2, [$chef->id])))->map(fn($e):int => $e->nr_pizzas)->toArray(),
+                "borderColor" => $chef->color,
+                "backgroundColor" => $chef->color.'ff'
+            ]);
+            array_push($chef_md_stack, (object)[
+                "label" => $chef->name,
+                "data" => (new Collection(DB::select($sql_2, [$chef->id])))->map(fn($e):int => $e->nr_pizzas)->toArray(),
+                "borderColor" => $chef->color,
+                "backgroundColor" => $chef->color.'ff',
+                "stack" => 'first'
+            ]);
+        }
+        
+        $sql_3 = "
+                    select 
+                            concat(users.id, ' - ', users.name, ' ( ', role.role_name, ' )') as title, 
+                            holidays_start as start, 
+                            holidays_end as end,
+                            color,
+                            'true' as allDay,
+                            'true' as stick
+                    from    users inner join role on users.fk_role = role.id
+                    where   (fk_role = 3 or fk_role = 2) and holidays_start is not null and holidays_end is not null
+            ";
         return Inertia::render('Dashboards/Admin',[
             "users" => User::all(),
-            "datasets_chef_weekly" => (new Collection(DB::select($sql)))->map(fn($el):int => $el->nr_pizzas)->toArray()
-            //"datasts_chef_weekly" => DB::select($sql)
+            "chef_weekly_data" => $chef_wd,
+            "chef_weekly_labels" => range(1, 53),
+            "chef_monthly_data" => $chef_md,
+            "chef_monthly_labels" => range(1, 12),
+            "chef_monthly_data_stack" => $chef_md_stack,
+            "chef_monthly_labels_stack" => range(1, 12),
+            "holidays" => DB::select($sql_3)
         ]);
     })->name('admin');
 
     Route::get('/guest/{user}', function (User $user) {
         return Inertia::render('Dashboards/Guest', [
-            "pizzas" => Pizza::all()->where("fk_client", $user->id)->flatten()->toArray()
+            "pizzas" => Pizza::all()->where("fk_client", $user->id)->flatten()->toArray(),
+            "all_toppings" => Topping::all()->map(fn($e):string=>$e->name)->unique()->flatten()->toArray(),
+            "new_pizza" => new Pizza()
         ]);
     })->name('guest');
 
@@ -101,6 +152,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/pizza-detail/{pizza}', [PizzaController::class, 'detail'])->name('pizzas.showorderdetail');
 
     Route::patch('/editrole/{user}', [ProfileController::class, 'update_role'])->name('user_role.update');
+    Route::patch('/guest/{user}', [PizzaController::class, 'insert'])->name('pizza.insert');
     
     // PROFILE API
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

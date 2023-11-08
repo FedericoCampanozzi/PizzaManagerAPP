@@ -44,3 +44,12 @@
 .sortable-handler {
     touch-action: none;
   }
+
+.fixed-header {
+    position: sticky; 
+    top: 0;
+}
+
+.fixed-table {
+    max-height: 500px;
+}

@@ -1,16 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import Table from "@/Components/Table.jsx";
 
-const columns = [
-    'client',
-    'size',
-    'toppings',
-    'chef',
-    'status',
-    'deliveryman',
-    'delivery'
-];
-
 export default function GuerstDashboard({ auth, pizzas }) {
     const pageTitle = auth.user.fk_role == 2 ? "Chef Page" : "Delivery Man Page";
     return (
@@ -30,14 +20,25 @@ export default function GuerstDashboard({ auth, pizzas }) {
                                 auth.user.fk_role == 2 ?
                                 (
                                     <Table  items={pizzas} 
-                                            columns={columns} 
+                                            columns={[
+                                                'client',
+                                                'ordered',
+                                                'size',
+                                                'toppings',
+                                                'status'
+                                            ]} 
                                             primary="Order Number"
                                             action="editchef"
                                             actionlabel="Edit Status" />
 
                                 ) : (
                                     <Table  items={pizzas}
-                                            columns={columns}
+                                            columns={[
+                                                'client',
+                                                'ordered',
+                                                'status',
+                                                'delivery'
+                                            ]}
                                             primary="Order Number"
                                             action="editdeliveryman"
                                             actionlabel="Edit Status" />

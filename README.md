@@ -16,21 +16,12 @@ Clone this repo and run the following commands to install the dependencies and s
 
 ---------------------------------------------------------
 ## New Features
-- implement different dashboard:
-    1. if admin => can see all users and can modify his role
-    2. if chef => see only pizzas with fk_pizzastatus = NULL OR fk_chef = *my_id*
-    3. if delivery-man => see only pizzas with (fk_deliveryman = NULL AND fk_pizzastatus = 3) OR fk_deliveryman = *my_id*
-    4. if guest => can see mine pizzas and their states (show.jsx) (fk_client = *my_id*) or put a new order
-- put a button in table that change the next state (*id_state* += 1) [pt. 2 and 3]
-- put nice toppings label
-- in admin page implement:
-    1. a calendar that shows worker holidays
-    2. a line-chart that shows dayly and weekly order
-    3. a bar-chart that shows dayly and weekly taking for each chef and delivery man
+- put a button in table that change the next state (*id_state* += 1)
 
 ---------------------------------------------------------
-## Done
-- added tables (model, factory, seeder, ....):
-    1. role
-    2. status
-    3. added foreign key into pizzas and users
+## Bug
+- In admin query (weekly and monthly) need to add 0 for month or week without data
+- Update role doesn't work correctly
+- In worker page (chef + delivery man) doesn't show some columns
+- Edit Status doesn't work correctly
+- Understande bindings attribute php jsx

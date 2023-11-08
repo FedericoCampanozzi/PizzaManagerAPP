@@ -5,51 +5,30 @@ import TextInput from '@/Components/TextInput';
 import { useForm } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 import ComboSelect from 'react-combo-select';
+import Table from '@/Components/Table';
 
-export default function GuestDashboard({ auth, pizzas, toppings }) {
+const selectOptions = { scrollHeight: 200, direction: 'down' }
 
-    console.log(pizzas);
+export default function GuestDashboard({ auth, pizzas, all_toppings, new_pizza}) {
 
-    const ComboProps = {
-        scrollHeight: 200, // number
-        preferredDirection: 'down' // 'top' | 'down'
-    };
+    console.log(all_toppings);
 
-    toppings = ["a", "b", "c", "d", "e"];
-
-    let pizza = {
-        size : "size",
-        crust : "crush",
-        toppings : " ",
-    };
-    
     const { data, patch, setData, processing, errors, recentlySuccessful } = useForm({
-        size: pizza.size,
-        crust: pizza.crust,
-        toppings: pizza.toppings,
+        size: new_pizza.size,
+        crust: new_pizza.crust,
+        toppings: new_pizza.toppings,
     });
 
     const submit = (e) => {
         e.preventDefault();
-        //patch(route('pizzas.update', pizza.id));
+        console.log(new_pizza);
+        patch(route('pizzas.insert', pizza.id));
     };
 
-    const onToggle = (open, value, text) => {
-        window.addEventListener('touchstart', function(event) {
-            // some logic
-            event.preventDefault(); // <-- that should not be used in passive
-            // some other magic
-        });
-        console.log(open, value, text);
-    }
-
-    const onChange = (value, text) => {
-        window.addEventListener('touchstart', function(event) {
-            // some logic
-            event.preventDefault(); // <-- that should not be used in passive
-            // some other magic
-        });
-        console.log(value, text);
+    const addToppingToPizza = (value, text) => {
+        if(value){
+            new_pizza.toppings = text;
+        }
     }
 
     return (
@@ -69,7 +48,7 @@ export default function GuestDashboard({ auth, pizzas, toppings }) {
                                     columns={[
                                         'client',
                                         'size',
-                                        'toppings',
+                                        'aaaa',
                                         'status',
                                         'chef',
                                         'deliveryman',
@@ -77,7 +56,8 @@ export default function GuestDashboard({ auth, pizzas, toppings }) {
                                     ]} 
                                     primary="Order Number" 
                                     action="pizzas.showorderdetail"
-                                    noResultLabel="You didn't order any pizzas" />                                    
+                                    noResultLabel="You didn't order any pizzas"
+                                    fixedHeader='true' />                                    
                         </div>
                     </div>
                     <div className="p-5 max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -90,10 +70,6 @@ export default function GuestDashboard({ auth, pizzas, toppings }) {
                                     <h2 className="text-lg font-medium text-gray-900">
                                         Order a Pizza
                                     </h2>
-
-                                    <p className="mt-1 text-sm text-gray-600">
-                                        
-                                    </p>
                                 </header>
 
                                 <form onSubmit={submit} className="mt-6 space-y-6">
@@ -122,11 +98,11 @@ export default function GuestDashboard({ auth, pizzas, toppings }) {
                                     <div>
                                         <InputLabel htmlFor="toppings" value="toppings" />
 
-                                        <ComboSelect    data={toppings} 
+                                        <ComboSelect    data={all_toppings} 
                                                         text="No toppings :("
-                                                        onChange={onChange}
-                                                        onToggle={onToggle}
-                                                        type="multiselect" {...ComboProps}/>
+                                                        onChange={addToppingToPizza}
+                                                        type="multiselect"
+                                                        {...selectOptions}/>
                                     </div>
 
                                     <div className="flex items-center gap-4">

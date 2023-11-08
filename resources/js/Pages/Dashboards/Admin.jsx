@@ -14,8 +14,9 @@ import {
   Title,
   Tooltip,
   Legend,
+  BarElement
 } from 'chart.js';
-import { Line } from 'react-chartjs-2';
+import { Line, Bar } from 'react-chartjs-2';
 
 ChartJS.register(
   CategoryScale,
@@ -24,14 +25,27 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  BarElement
 );
 
-const events = [{ title: "Meeting", start: new Date(2023,10,6), end: new Date(2023,10,9) }];
-
-const get_options = (gfx_title) => {
+const get_options = (gfx_title, xLabel = 'x', yLabel = 'y') => {
     return {
         responsive: true,
+        scales:{
+            y:{
+                title: {
+                    display: true,
+                    text: yLabel
+                }
+            },
+            x:{
+                title: {
+                    display: true,
+                    text: xLabel
+                }
+            }
+        },
         plugins: {
             legend: {
                 position: "top",
@@ -44,67 +58,33 @@ const get_options = (gfx_title) => {
     };
 };
 
-const get_data = (labels, datasets) => {
+const get_data = (lbls, dts) => {
     return {
-      labels: ["a", "b", "c"],
-      datasets: [
-          {
-            label: 'Cory Luettgen Sr.',
-            data: [1,2,3],
-            borderColor: 'rgb(53, 162, 235)',
-            backgroundColor: 'rgba(53, 162, 235, 0.5)',
-          },
-          {
-            label: 'Cory Luettgen Sr.',
-            data: [4,12,13],
-            borderColor: 'rgb(53, 162, 235)',
-            backgroundColor: 'rgba(53, 162, 235, 0.5)',
-          }]
+      labels: lbls,
+      datasets: dts
     };
 };
-
-/* calendar callback */
-const handleEventReceive = (eventInfo) => {
-  const newEvent = {
-    id: eventInfo.draggedEl.getAttribute("data-id"),
-    title: eventInfo.draggedEl.getAttribute("title"),
-    color: eventInfo.draggedEl.getAttribute("data-color"),
-    start: eventInfo.date,
-    end: eventInfo.date,
-    custom: eventInfo.draggedEl.getAttribute("data-custom")
-  };
-
-  //console.log(eventInfo);
-  /*
-  setState((state) => {
-    return {
-      ...state,
-      calendarEvents: state.calendarEvents.concat(newEvent)
-    };
-  });*/
-};
-/* **************** */
-
-
 
 export default function AdminDashboard({
     auth,
     users,
-    datasets_chef_weekly,
-    gfx_chef_monthly,
-    gfx_deliveryman_weekly,
-    gfx_deliveryman_monthly
-}) {
+    chef_weekly_data,
+    chef_weekly_labels,
+    chef_monthly_data,
+    chef_monthly_labels,
+    chef_monthly_data_stack,
+    chef_monthly_labels_stack,
+    holidays
+}) {    
     const [activeView, setActiveView] = React.useState("timeGridDay");
     const calendarRef = React.useRef(null);
 
     React.useEffect(() => {
-      //console.log("View Changed", activeView);
       const { current: calendarDom } = calendarRef;
       const API = calendarDom ? calendarDom.getApi() : null;
       API && API.changeView(activeView);
     }, [activeView]);
-    //console.log(datasets_chef_weekly);
+
     return (
         <>
             <AuthenticatedLayout
@@ -132,46 +112,17 @@ export default function AdminDashboard({
                 <div className="py-12">
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                            <div
-                                className="p-5"
-                                style={{
-                                    //width: "50%",
-                                    //float: "left",
-                                    //height: "auto",
-                                }}
-                            >
-                                <Line  options={get_options("Chef Weekly")} 
-                                       data={get_data(datasets_chef_weekly)} />
+                            <div className="p-5">
+                                <Line  options={get_options("Chef Weekly", "Weeks", "Pizzas")} 
+                                       data={get_data(chef_weekly_labels, chef_weekly_data)} />
                             </div>
-                            <div
-                                className="p-5"
-                                style={{
-                                    width: "50%",
-                                    float: "right",
-                                    height: "auto",
-                                }}
-                            >
-                                
+                            <div className="p-5">
+                                <Bar   options={get_options("Chef Monthy", "Month", "Pizzas")} 
+                                       data={get_data(chef_monthly_labels, chef_monthly_data)} />
                             </div>
-                            <div
-                                className="p-5"
-                                style={{
-                                    width: "50%",
-                                    float: "left",
-                                    height: "auto",
-                                }}
-                            >
-                                
-                            </div>
-                            <div
-                                className="p-5"
-                                style={{
-                                    width: "50%",
-                                    float: "right",
-                                    height: "auto",
-                                }}
-                            >
-                                
+                            <div className="p-5">
+                                <Bar   options={get_options("Chef Monthy Stacked", "Month", "Pizzas")} 
+                                       data={get_data(chef_monthly_labels_stack, chef_monthly_data_stack)} />
                             </div>
                         </div>
                     </div>
@@ -188,18 +139,7 @@ export default function AdminDashboard({
                                       center: "title",
                                       right: "dayGridMonth,timeGridWeek,timeGridDay"
                                     }}
-                                    initialView="dayGridMonth"
-                                    editable={true}
-                                    selectable={true}
-                                    selectMirror={true}
-                                    dayMaxEvents={true}
-                                    weekends={true}
-                                    events={events}
-                                    droppable={true}
-                                    eventReceive={handleEventReceive}
-                                    locale={'it-IT'}
-                                    eventDragStart={(e)=>console.log("event start",e)}
-                                    eventDragStop={(e)=>console.log("event end",e)}
+                                    events={holidays}
                                 />
                             </div>
                         </div>

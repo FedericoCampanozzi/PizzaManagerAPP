@@ -19,6 +19,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->string('color')->default('#ffffff');
             $table->dateTime('holidays_start')->nullable();
             $table->dateTime('holidays_end')->nullable();
             $table->integer('fk_role')->unsigned()->default(4)->foreign('fk_role')->references('id')->on('role');

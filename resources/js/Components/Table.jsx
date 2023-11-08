@@ -1,18 +1,25 @@
 import NavLink from "./NavLink";
 
-export default function Table({ items, columns, primary, action, actionlabel="View Details", noResultLabel="Zero Result" }) {
+export default function Table({ items, columns, primary, action, actionlabel="View Details", noResultLabel="Zero Result", fixedHeader = false }) {
+    
+    const tr_class = fixedHeader ? "bg-gray-50 dark:bg-gray-700 fixed-header" : ""
+    const td_class = fixedHeader ? "px-6 py-3 fixed-header" : "px-6 py-3"
+    const div_class = fixedHeader ? 
+        "relative overflow-auto border shadow-md sm:rounded-lg fixed-table" : 
+        "relative overflow-x-auto border shadow-md sm:rounded-lg"
+
     return (
-        <div className="relative overflow-x-auto border shadow-md sm:rounded-lg">
+        <div className={div_class}>
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" className="px-6 py-3">Nr.</th>
-                    <th scope="col" className="px-6 py-3">{primary}</th>
-                    {columns.map((column) =>
-                        <th key={column} scope="col" className="px-6 py-3">{column}</th>
-                    )}
-                    <th scope="col" className="px-6 py-3"></th>
-                </tr>
+                    <tr className={tr_class}>
+                        <th scope="col" className={td_class}>Nr.</th>
+                        <th scope="col" className={td_class}>{primary}</th>
+                        {columns.map((column) =>
+                            <th key={column} scope="col" className={td_class}>{column}</th>
+                        )}
+                        <th scope="col" className={td_class}></th>
+                    </tr>
                 </thead>
                 <tbody>
                 {

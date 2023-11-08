@@ -38,7 +38,8 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
             'fk_role' => UtilityFunctions::pick_itm_random($roles)["id"],
             'holidays_start' => $holidays_start,
-            'holidays_end' => $holidays_end
+            'holidays_end' => $holidays_end,
+            'color' => fake()->hexColor()
         ];
     }
 

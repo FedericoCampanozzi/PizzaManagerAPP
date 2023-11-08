@@ -6,7 +6,9 @@ use App\Models\Pizza;
 use App\Models\PizzaToppings;
 use App\Models\Status;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -44,5 +46,12 @@ class PizzaController extends Controller
         $pizza->update([
             'status' => $request->status
         ]);
+    }
+
+    public function insert(Pizza $pizza, Request $request): RedirectResponse
+    {
+        $request->pizza->save();
+
+        return Redirect::route('guest');
     }
 }

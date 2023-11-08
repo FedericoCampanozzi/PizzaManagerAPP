@@ -5,9 +5,9 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import { useForm } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 import SelectInput from "@/Components/SelectInput.jsx";
-
-export default function EditPizzaStatus({auth, pizza, statues, isChef}){
-
+export default function EditPizzaStatus({auth, pizza, next_text, next_id}){
+//export default function EditPizzaStatus({auth, pizza, statues, isChef}){
+    
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
         status: pizza.status
     });
@@ -34,7 +34,19 @@ export default function EditPizzaStatus({auth, pizza, statues, isChef}){
                                     (<InputLabel htmlFor="status" value="Delivery Status" />)
                                 }
                                 
+                                <div>
+                                    Current Pizza Info : <br />
+                                    Chef {pizza.chef} <br />
+                                    Stto {pizza.chef} <br />
+                                    Delivery man {pizza.chef} <br />
+                                    Delivery man {pizza.chef} <br />
+                                    Delivery man {pizza.chef} <br />
+                                </div>
 
+                                <div>
+                                    Change status in {next_text}
+                                </div>
+                                
                                 <SelectInput
                                     id="status"
                                     className="mt-1 block w-full"
