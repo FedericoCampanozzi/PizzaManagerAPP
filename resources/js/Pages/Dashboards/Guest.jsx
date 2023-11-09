@@ -4,14 +4,11 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { useForm } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
-import ComboSelect from 'react-combo-select';
 import Table from '@/Components/Table';
 
 const selectOptions = { scrollHeight: 200, direction: 'down' }
 
 export default function GuestDashboard({ auth, pizzas, all_toppings, new_pizza}) {
-
-    console.log(all_toppings);
 
     const { data, patch, setData, processing, errors, recentlySuccessful } = useForm({
         size: new_pizza.size,
@@ -97,12 +94,6 @@ export default function GuestDashboard({ auth, pizzas, all_toppings, new_pizza})
 
                                     <div>
                                         <InputLabel htmlFor="toppings" value="toppings" />
-
-                                        <ComboSelect    data={all_toppings} 
-                                                        text="No toppings :("
-                                                        onChange={addToppingToPizza}
-                                                        type="multiselect"
-                                                        {...selectOptions}/>
                                     </div>
 
                                     <div className="flex items-center gap-4">

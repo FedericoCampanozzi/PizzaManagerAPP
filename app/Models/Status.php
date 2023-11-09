@@ -20,4 +20,14 @@ class Status extends Model
     {
         return Status::all()->where('isPizzaStatus', false)->toArray();
     }
+
+    public static function getStatusByName($statusname) : Status
+    {
+        return Status::all()->where('name', $statusname)->first();
+    }
+
+    public static function getStatusById($statusid) : Status
+    {
+        return Status::all()->where('id', $statusid)->first();
+    }
 }

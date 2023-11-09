@@ -17,7 +17,8 @@ class Role extends Model
         return $this->hasMany(User::class);
     }
 
-    public static function getRoleByName($roleName){
+    public static function getRoleByName($roleName) : Role
+    {
         return Role::all()->where('role_name', $roleName)->first();
     }
 }

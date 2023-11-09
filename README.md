@@ -14,9 +14,9 @@ Clone this repo and run the following commands to install the dependencies and s
 - `php artisan serve`
 - `npm run dev`
 
----------------------------------------------------------
-## New Features
-- put a button in table that change the next state (*id_state* += 1)
+For regenerate database use
+
+`php artisan migrate:refresh --seed`
 
 ---------------------------------------------------------
 ## Bug
@@ -24,4 +24,6 @@ Clone this repo and run the following commands to install the dependencies and s
 - Update role doesn't work correctly
 - In worker page (chef + delivery man) doesn't show some columns
 - Edit Status doesn't work correctly
-- Understande bindings attribute php jsx
+- Understand bindings attribute from react to php
+- Chef and Deliveryman have to see pizzas in their state (Chef => isPizzaStatus = 1, Deliveryman => isPizzaStatus = 0)
+- Size e crush have to select combo

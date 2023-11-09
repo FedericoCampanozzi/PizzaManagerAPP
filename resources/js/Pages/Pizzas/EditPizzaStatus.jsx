@@ -5,15 +5,16 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import { useForm } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 import SelectInput from "@/Components/SelectInput.jsx";
-export default function EditPizzaStatus({auth, pizza, next_text, next_id}){
-//export default function EditPizzaStatus({auth, pizza, statues, isChef}){
-    
-    const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
-        status: pizza.status
+
+export default function EditPizzaStatus({auth, pizza, next_text, next_id, isChef}){
+
+    const { patch, processing, recentlySuccessful } = useForm({
     });
 
     const submit = (e) => {
-        //e.preventDefault();
+        e.preventDefault();
+        let clm = isChef ? "fk_pizzastatus " : "fk_deliverystatus ";
+        alert("set column " + clm + " with value " + next_id);
         //patch(route('pizzas.update', pizza.id));
     };
 
@@ -27,48 +28,64 @@ export default function EditPizzaStatus({auth, pizza, next_text, next_id}){
                     <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                         <section className="max-w-xl">
                             <form onSubmit={submit} className="space-y-6">
-                            <div>
-                                {
-                                    isChef?
-                                    (<InputLabel htmlFor="status" value="Status Pizza" />):
-                                    (<InputLabel htmlFor="status" value="Delivery Status" />)
-                                }
-                                
                                 <div>
-                                    Current Pizza Info : <br />
-                                    Chef {pizza.chef} <br />
-                                    Stto {pizza.chef} <br />
-                                    Delivery man {pizza.chef} <br />
-                                    Delivery man {pizza.chef} <br />
-                                    Delivery man {pizza.chef} <br />
+                                    <div>
+                                        <strong>Current Pizza Info</strong> <br />
+                                        Chef : {pizza.chef} <br />
+                                        Pizza Status : {pizza.status} <br />
+                                        
+                                        { 
+                                            pizza.fk_pizzastatus != 3 ? 
+                                            (<>
+                                                <span>Pizza is not ready so there mustn't have delivery-man</span>
+                                                <br />
+                                            </>):(
+                                                <></>
+                                            )
+                                        }
+
+                                        {
+                                            pizza.fk_pizzastatus == 3 && pizza.deliveryman == null ? 
+                                            (
+                                                <>
+                                                    <span>This pizza isn't taking by any riderds</span><br />
+                                                </>
+                                                ):(
+                                                    <></>
+                                                )
+                                        }
+
+                                        { 
+                                            pizza.fk_pizzastatus == 3 && pizza.deliveryman != null ? 
+                                            (
+                                                <>
+                                                    <span>Delivery status : {pizza.delivery}</span><br />
+                                                    <span>Delivery Man : {pizza.deliveryman}</span>
+                                                </>
+                                            ):(
+                                                <>
+                                                </>
+                                            )
+                                        }
+                                    </div>
+
+                                    <div className='py-5'>
+                                        Change status in <strong>{next_text}</strong>
+                                    </div>
                                 </div>
 
-                                <div>
-                                    Change status in {next_text}
+                                <div className="flex items-center gap-4">
+                                    <PrimaryButton disabled={processing}>Save</PrimaryButton>
+
+                                    <Transition
+                                        show={recentlySuccessful}
+                                        enter="transition ease-in-out"
+                                        enterFrom="opacity-0"
+                                        leave="transition ease-in-out"
+                                        leaveTo="opacity-0">
+                                        <p className="text-sm text-gray-600">Saved.</p>
+                                    </Transition>
                                 </div>
-                                
-                                <SelectInput
-                                    id="status"
-                                    className="mt-1 block w-full"
-                                    options={statues}
-                                    value={data.status}
-                                    onChange={(e) => setData('status', e.target.value)}/>
-
-                                <InputError className="mt-2" message={errors.status} />
-                            </div>
-
-                            <div className="flex items-center gap-4">
-                                <PrimaryButton disabled={processing}>Save</PrimaryButton>
-
-                                <Transition
-                                    show={recentlySuccessful}
-                                    enter="transition ease-in-out"
-                                    enterFrom="opacity-0"
-                                    leave="transition ease-in-out"
-                                    leaveTo="opacity-0">
-                                    <p className="text-sm text-gray-600">Saved.</p>
-                                </Transition>
-                            </div>
                             </form>
                         </section>
                     </div>

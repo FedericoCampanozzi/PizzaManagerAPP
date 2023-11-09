@@ -104,7 +104,8 @@ Route::group(['middleware' => 'auth'], function () {
         $sql =  "
                     select * 
                     from pizzas 
-                    where fk_pizzastatus is null or fk_chef is null or fk_chef = ?
+                    where (fk_pizzastatus is null or fk_chef is null or fk_chef = ?) and 
+                           fk_pizzastatus <> 3
                     order by fk_chef ASC, fk_pizzastatus ASC
                 ";
         return Inertia::render('Dashboards/Worker', [
@@ -117,7 +118,7 @@ Route::group(['middleware' => 'auth'], function () {
         $sql = "
                     select * 
                     from pizzas 
-                    where (fk_pizzastatus = 3 and fk_deliveryman is null) or fk_deliveryman = ?
+                    where (fk_pizzastatus = 3 and fk_pizzastatus <> 6 and fk_deliveryman is null) or fk_deliveryman = ?
                     order by fk_deliveryman ASC
                 ";
         return Inertia::render('Dashboards/Worker', [
@@ -135,16 +136,25 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/editchef/{pizza}', function (Pizza $pizza) {
         return Inertia::render('Pizzas/EditPizzaStatus', [
-            "statues" => Status::all()->where('isPizzaStatus', true)->map(fn($el):string => $el->name)->flatten()->toArray(),
             "pizza" => $pizza,
             "isChef" => true
         ]);
     })->name('editchef');
 
     Route::get('/editdeliveryman/{pizza}', function (Pizza $pizza) {
+        $deliverystatus = $pizza->fk_deliverystatus;
+        $next_status = null;
+        
+        if($deliverystatus == null) $next_status = Status::getStatusByName('Picked');
+        else {
+            $deliverystatus++;
+            $next_status = Status::getStatusById($deliverystatus);
+        }
+
         return Inertia::render('Pizzas/EditPizzaStatus', [
-            "statues" => Status::all()->where('isPizzaStatus', false)->map(fn($el):string => $el->name)->flatten()->toArray(),
             "pizza" => $pizza,
+            "next_text" => $next_status->name,
+            "next_id" => $next_status->id,
             "isChef" => false
         ]);
     })->name('editdeliveryman');
