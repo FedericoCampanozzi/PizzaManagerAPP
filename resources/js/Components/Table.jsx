@@ -16,7 +16,7 @@ export default function Table({ items, columns, primary, action, actionlabel="Vi
                         <th scope="col" className={td_class}>Nr.</th>
                         <th scope="col" className={td_class}>{primary}</th>
                         {columns.map((column) =>
-                            <th key={column} scope="col" className={td_class}>{column}</th>
+                            <th key={column['value']} scope="col" className={td_class}>{column['name']}</th>
                         )}
                         <th scope="col" className={td_class}></th>
                     </tr>
@@ -38,8 +38,8 @@ export default function Table({ items, columns, primary, action, actionlabel="Vi
                             #{item.id}
                         </th>
                         {columns.map((column) =>
-                            <td key={column} className="px-6 py-4">
-                                {item[column]}
+                            <td key={column['value']} className="px-6 py-4">
+                                {item[column['value']]}
                             </td>
                         )}
                         {

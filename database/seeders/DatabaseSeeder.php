@@ -10,6 +10,7 @@ use App\Models\Status;
 use App\Models\User;
 use App\Models\Topping;
 use Database\Factories\PizzaToppingsFactory;
+use Database\Factories\ToppingFactory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -21,10 +22,13 @@ class DatabaseSeeder extends Seeder
     {
         $pizzas = 1000;
         $toppingsForPizzaFactor = 3;
+        $n_toppings = 15;
+
+        ToppingFactory::pre_init($n_toppings);
 
         Role::factory(4)->create();
         Status::factory(6)->create();
-        Topping::factory(10)->create();
+        Topping::factory($n_toppings)->create();
         User::factory(25)->create();
         Pizza::factory($pizzas)->create();
 

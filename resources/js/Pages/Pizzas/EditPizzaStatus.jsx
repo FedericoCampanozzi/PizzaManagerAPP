@@ -1,10 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { useForm } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
-import SelectInput from "@/Components/SelectInput.jsx";
 
 export default function EditPizzaStatus({auth, pizza, next_text, next_id, isChef}){
 

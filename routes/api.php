@@ -1,6 +1,4 @@
 <?php
 
-use App\Http\Controllers\PublicPizzaController;
+use App\Http\Controllers\PublicPagesController;
 use Illuminate\Support\Facades\Route;
-
-Route::get('/pizzas/{Pizza}', [PublicPizzaController::class, 'show'])->name('public.pizzas.show');

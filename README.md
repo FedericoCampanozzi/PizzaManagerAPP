@@ -27,3 +27,5 @@ For regenerate database use
 - Understand bindings attribute from react to php
 - Chef and Deliveryman have to see pizzas in their state (Chef => isPizzaStatus = 1, Deliveryman => isPizzaStatus = 0)
 - Size e crush have to select combo
+- Delete Pizza doesn't work correctly
+- Remove PublicPizzaController

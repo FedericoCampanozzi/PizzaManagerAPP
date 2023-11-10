@@ -21,7 +21,7 @@ class StatusFactory extends Factory
     {
         $i = StatusFactory::getIdx();
         return [
-            'name'=>['Ordered','Baking','Ready','Picked','Arriving','Paid'][$i],
+            'name'=>['Baking','Assembly','Ready','Picked','Arriving','Paid'][$i],
             'isPizzaStatus'=>[true,true,true,false,false,false][$i],
             'sequence'=>[1,2,3,1,2,3][$i]
         ];
