@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Utils;
+use App\Models\Role;
+use App\Models\Status;
+use App\Models\User;
 
 class UtilityFunctions
 {
@@ -100,6 +103,36 @@ class UtilityFunctions
             "Sage",
             "Thym",
         ]);
+    }
+
+    public static function insert_static_data(string $class, array $data): bool
+    {
+        try {
+            if($class == User::class) {
+                $u = new User();
+                $u->name = $data['name'];
+                $u->email = $data['email'];
+                $u->fk_role = $data['fk_role'];
+                $u->password = $data['password'];
+                $u->remember_token = $data['remember_token'];
+                $u->color = $data['color'];
+                $u->save();
+            } else if ($class == Role::class) {
+                $r = new Role();
+                $r->role_name = $data['role_name'];
+                $r->save();
+            } else if ($class == Status::class) {
+                $s = new Status();
+                $s->name = $data['name'];
+                $s->isPizzaStatus = $data['isPizzaStatus'];
+                $s->sequence = $data['sequence'];
+                $s->save();
+            }
+        } catch (Exception) {
+            return false;
+        } finally {
+            return true;
+        }
     }
 }
 

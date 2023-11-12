@@ -13,12 +13,7 @@ class RoleController extends Controller
     {
         return Inertia::render('Profile/Partials/EditRole', [
             "edituser" => User::all()->where('id',$user->id)->first(),
-            "options" => Role::all()->map(fn($el):string=>$el->role_name)
+            "roles" => Role::all()->toArray()
         ]);
-    }
-
-    public function update (Request $request, User $user): Response
-    {
-        
     }
 }

@@ -7,8 +7,11 @@ import Table from '@/Components/Table';
 import Select from "react-dropdown-select";
 import styled from "@emotion/styled";
 
-let sel_toppings = [];
-let search_value = "";
+let pizza_toppings = [];
+let pizza_size = "";
+let pizza_crust = "";
+
+let search_value;
 
 const columns = [
     {name : 'Client', value : 'client'},
@@ -110,11 +113,7 @@ const Button = styled.button`
 const dropdownRenderer = ({ props, methods }) => {
     const fake_state_color = '#80bfff';
     const fake_state_keepSelectedInList = true;
-
-
-
     const regexp = new RegExp(search_value, "i");
-
     return (
       <div>
         <SearchAndToggle color={fake_state_color}>
@@ -159,7 +158,7 @@ const dropdownRenderer = ({ props, methods }) => {
                   <input
                     type="checkbox"
                     onChange={() => methods.addItem(option)}
-                    checked={sel_toppings.indexOf(option) !== -1}
+                    checked={pizza_toppings.indexOf(option) !== -1}
                   />
                   <ItemLabel>{option[props.labelField]}</ItemLabel>
                 </Item>
@@ -170,37 +169,25 @@ const dropdownRenderer = ({ props, methods }) => {
     );
 };
 
-export default function GuestDashboard({    auth, 
-                                            pizzas, 
-                                            all_toppings, 
-                                            all_sizes, 
-                                            all_crusts, 
-                                            new_pizza
-                                        }) {
-    /*
-    console.log("pizzas=",pizzas);
-    console.log("all_toppings=",all_toppings);
-    console.log("all_sizes=",all_sizes);
-    console.log("all_crusts=",all_crusts);
-    */
-
-    const { patch, processing, recentlySuccessful } = useForm({
-        size: new_pizza.size,
-        crust: new_pizza.crust,
-        toppings: sel_toppings,
-    });
+export default function GuestDashboard({
+      auth, 
+      pizzas, 
+      all_toppings, 
+      all_sizes, 
+      all_crusts
+    }) {
+    const { patch, processing, recentlySuccessful } = useForm({});
 
     const submit = (e) => {
-        e.preventDefault();
-        console.log("insert = ", new_pizza, " and ", sel_toppings);
-        //patch(route('pizzas.insert', pizza.id));
-    };
+      e.preventDefault();
+      console.log("pizza", pizza_crust, pizza_size, auth.user.name)
+      patch(route('pizza.insert', [pizza_crust, pizza_size, auth.user]));
 
-    const addToppingToPizza = (value, text) => {
-        if(value){
-            new_pizza.toppings = text;
-        }
-    }
+      pizza_toppings.forEach(topping => {
+        console.log("topping=", topping);
+        patch(route('pizzatopping.insert', [topping, auth.user]));
+      });
+    };
 
     return (
         <>
@@ -242,7 +229,7 @@ export default function GuestDashboard({    auth,
                                                 itemRenderer={itemRenderer}
                                                 dropdownRenderer={dropdownRenderer}
 
-                                                onChange={(values) => sel_toppings = values} />
+                                                onChange={(values) => pizza_toppings = values} />
                                     </div>
                                     
                                     <div>
@@ -252,7 +239,7 @@ export default function GuestDashboard({    auth,
                                                 valueField="sid"
                                                 itemRenderer={itemRenderer}
 
-                                                onChange={(values) => new_pizza.size = values[0]["sid"] } />
+                                                onChange={(values) => pizza_size = values[0]["sid"] } />
                                     </div>
 
                                     <div>
@@ -262,7 +249,7 @@ export default function GuestDashboard({    auth,
                                                 valueField="sid"
                                                 itemRenderer={itemRenderer}
 
-                                                onChange={(values) => new_pizza.crust = values[0]["sid"]} />
+                                                onChange={(values) => pizza_crust = values[0]["sid"]} />
                                     </div>
 
                                     <div className="flex items-center gap-4 div-on-bot">

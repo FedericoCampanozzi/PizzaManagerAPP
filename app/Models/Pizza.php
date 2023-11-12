@@ -12,6 +12,14 @@ class Pizza extends Model
 
     use HasFactory;
     protected $fillable = [
+        'size',
+        'crust',
+        'fk_client',
+        'fk_chef',
+        'fk_pizzastatus',
+        'fk_deliveryman',
+        'fk_deliverystatus',
+        'ordered'
     ];
 
     protected $appends = [

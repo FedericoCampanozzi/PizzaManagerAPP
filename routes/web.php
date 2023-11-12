@@ -2,8 +2,9 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PizzaController;
+use App\Http\Controllers\PizzaToppingController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PublicPagesController;
+use App\Http\Controllers\PublicPizzaController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
@@ -28,18 +29,20 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/deliveryman/{user}', [DashboardController::class, 'deliveryman'])->name('deliveryman');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::get('/editrole/{user}', [RoleController::class, 'edit'])->name('role.edit');
-    Route::get('/editchef/{pizza}', [PublicPagesController::class, 'chef'])->name('edit.status.chef');
-    Route::get('/editdeliveryman/{pizza}', [PublicPagesController::class, 'deliveryman'])->name('edit.status.deliveryman');
+    Route::get('/editchef/{pizza}', [PublicPizzaController::class, 'chef'])->name('edit.status.chef');
+    Route::get('/editdeliveryman/{pizza}', [PublicPizzaController::class, 'deliveryman'])->name('edit.status.deliveryman');
     Route::get('/pizza-detail/{pizza}', [PizzaController::class, 'detail'])->name('pizzas.showorderdetail');
 
     /* PATCH API */
-    Route::patch('/editrole/{user}', [RoleController::class, 'update'])->name('role.update');
-    Route::patch('/guest/{user}', [PizzaController::class, 'insert'])->name('pizza.insert');
+    Route::patch('/editrole/{user}/{role}', [ProfileController::class, 'update_role'])->name('profile.role.update');
+    Route::patch('/guest/{crust}/{size}/{user}', [PizzaController::class, 'insert'])->name('pizza.insert');
+    Route::patch('/guest/{topping}/{user}', [PizzaToppingController::class, 'insert'])->name('pizzatopping.insert');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/chef/{pizza}/{status}/{user}/{isChef}', [PizzaController::class, 'update'])->name('pizza.update');
 
     /* DELETE API */
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::delete('/guest/{user}', [PizzaController::class, 'destroy'])->name('pizza.destroy');
+    Route::delete('/pizza-detail/{pizza}/{user}', [PizzaController::class, 'destroy'])->name('pizza.destroy');
 });
 
 require __DIR__.'/auth.php';

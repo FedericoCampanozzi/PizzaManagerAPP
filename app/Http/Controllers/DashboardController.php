@@ -17,7 +17,7 @@ class DashboardController extends Controller
         return Inertia::render('Dashboards/Dashboard');
     }
 
-    public function admin (): Response
+    public function admin(): Response
     {
         $sql_1 = "
                 select  *
@@ -84,7 +84,7 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function guest (User $user): Response
+    public function guest(User $user): Response
     {
         return Inertia::render('Dashboards/Guest', [
             "pizzas" => Pizza::all()->where("fk_client", $user->id)->flatten()->toArray(),
@@ -94,19 +94,16 @@ class DashboardController extends Controller
             ])->toArray(),
             "all_sizes" => (new Collection(Pizza::getSizes()))->map(fn($e) => (object)[
                 "sid" => $e 
-            ])->toArray(),
-            "new_pizza" => new Pizza()
+            ])->toArray()
         ]);
     }
 
-    public function chef (User $user): Response
+    public function chef(User $user): Response
     {
         $sql =  "
-                    select * 
-                    from pizzas 
-                    where (fk_pizzastatus is null or fk_chef is null or fk_chef = ?) and 
-                           fk_pizzastatus <> 3
-                    order by fk_chef ASC, fk_pizzastatus ASC
+                    select id, size, crust, client, ordered, pizzastatus
+                    from pizzasinfocomplete 
+                    where (fk_pizzastatus is null or fk_chef is null or fk_chef = ?) and fk_pizzastatus <> 3
                 ";
         return Inertia::render('Dashboards/Worker', [
             "isChefPage" => true,
@@ -114,16 +111,16 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function deliveryman (User $user): Response
+    public function deliveryman(User $user): Response
     {
         $sql = "
-                    select * 
-                    from pizzas 
-                    where (fk_pizzastatus = 3 and fk_pizzastatus <> 6 and fk_deliveryman is null) or fk_deliveryman = ?
+                    select id, client, ordered, deliverystatus 
+                    from pizzasinfocomplete 
+                    where (fk_pizzastatus = 3 and fk_pizzastatus <> 6 and (fk_deliveryman is null or fk_deliveryman = ?))
                     order by fk_deliveryman ASC
                 ";
         return Inertia::render('Dashboards/Worker', [
-            "isChefPage" => true,
+            "isChefPage" => false,
             "pizzas" => DB::select($sql, [$user->id])
         ]);
     }

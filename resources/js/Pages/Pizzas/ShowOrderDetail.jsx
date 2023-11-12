@@ -8,14 +8,14 @@ import { useForm } from '@inertiajs/react';
 
 export default function ShowOrderDetail({ auth, pizza, pizzastatues, deliverystatues, toppings }) {
     
-    const { patch, processing } = useForm({
+    const { delete: destroy, processing } = useForm({
     
     });
     
     const submit = (e) => {
         e.preventDefault();
-        console.log("send to delete", pizza);
-        //patch(route('pizzas.update', pizza.id));
+        console.log("destroy pizza = ", pizza, " user = ", auth.user);
+        destroy(route('pizza.destroy', [pizza, auth.user]));
     };
 
     return (

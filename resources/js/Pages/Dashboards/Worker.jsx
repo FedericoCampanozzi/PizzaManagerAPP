@@ -1,6 +1,20 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import Table from "@/Components/Table.jsx";
 
+const chef_columns = [
+    {name:'Size', value:'size'},
+    {name:'Crust', value:'crust'},
+    {name:'Client', value:'client'},
+    {name:'Ordered', value:'ordered'},
+    {name:'Status', value:'pizzastatus'}
+];
+
+const deliveryman_columns = [
+    {name:'Client', value:'client'},
+    {name:'Ordered', value:'ordered'},
+    {name:'Status', value:'deliverystatus'}    
+];
+
 export default function GuerstDashboard({ auth, pizzas }) {
     const pageTitle = auth.user.fk_role == 2 ? "Chef Page" : "Delivery Man Page";
     return (
@@ -20,28 +34,19 @@ export default function GuerstDashboard({ auth, pizzas }) {
                                 auth.user.fk_role == 2 ?
                                 (
                                     <Table  items={pizzas} 
-                                            columns={[
-                                                'client',
-                                                'ordered',
-                                                'size',
-                                                'toppings',
-                                                'status'
-                                            ]} 
+                                            columns={chef_columns} 
                                             primary="Order Number"
-                                            action="editchef"
-                                            actionlabel="Edit Status" />
+                                            action="edit.status.chef"
+                                            actionlabel="Edit Status"
+                                            fixedHeader='true' />
 
                                 ) : (
                                     <Table  items={pizzas}
-                                            columns={[
-                                                'client',
-                                                'ordered',
-                                                'status',
-                                                'delivery'
-                                            ]}
+                                            columns={deliveryman_columns}
                                             primary="Order Number"
-                                            action="editdeliveryman"
-                                            actionlabel="Edit Status" />
+                                            action="edit.status.deliveryman"
+                                            actionlabel="Edit Status"
+                                            fixedHeader='true'  />
                                 )
                             }
                         </div>

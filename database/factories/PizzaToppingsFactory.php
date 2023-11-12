@@ -15,18 +15,6 @@ class PizzaToppingsFactory extends Factory
     private static $indexes_pizza = [];
     private static $indexes_toppings = [];
 
-    public static function get_current_pizza_id(): int
-    {
-        self::$pindex++;
-        return self::$indexes_pizza[self::$pindex];
-    }
-
-    public static function get_current_toppings_id(): int
-    {
-        self::$tindex++;
-        return self::$indexes_toppings[self::$tindex];
-    }
-
     public static function pre_init_indexes($array_length): void
     {
         $pizzas = Pizza::all()->toArray();
@@ -54,9 +42,11 @@ class PizzaToppingsFactory extends Factory
 
     public function definition(): array
     {
+        self::$pindex++;
+        self::$tindex++;
         return [
-            'fk_pizza' => PizzaToppingsFactory::get_current_pizza_id(),
-            'fk_topping' => PizzaToppingsFactory::get_current_toppings_id(),
+            'fk_pizza' => self::$indexes_pizza[self::$pindex],
+            'fk_topping' => self::$indexes_toppings[self::$tindex],
             'inserted' => fake()->dateTimeBetween('-1 years')
         ];
     }

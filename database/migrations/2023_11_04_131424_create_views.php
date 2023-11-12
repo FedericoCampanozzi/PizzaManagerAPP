@@ -34,6 +34,23 @@ return new class extends Migration
             left join pizzatoppings on pizzas.id = pizzatoppings.fk_pizza
             left join topping on pizzatoppings.fk_topping = topping.id
         ");
+
+        DB::statement("
+            create view pizzasInfoComplete as
+            
+            select  p.*,
+                    uclient.name as client, 
+                    uchef.name as chef,
+                    pstatus.name as pizzastatus,
+                    udeliveryman.name as deliveryman,
+                    dstatus.name as deliverystatus
+            from    pizzas as p inner join
+                    users uclient on p.fk_client = uclient.id left join
+                    users udeliveryman on p.fk_client = udeliveryman.id left join
+                    users uchef on p.fk_client = uchef.id left join 
+                    status pstatus on p.fk_pizzastatus = pstatus.id left join 
+                    status dstatus on p.fk_deliverystatus = dstatus.id
+    ");
     }
 
     /**
@@ -43,5 +60,6 @@ return new class extends Migration
     {
         DB::statement("DROP VIEW toppingCountInPizzas");
         DB::statement("DROP VIEW toppingInPizzas");
+        DB::statement("DROP VIEW pizzasInfoComplete");
     }
 };

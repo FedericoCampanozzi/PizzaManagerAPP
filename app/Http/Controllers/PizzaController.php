@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Pizza;
 use App\Models\PizzaToppings;
 use App\Models\Status;
+use App\Models\Topping;
+use App\Models\User;
+use DB;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Redirect;
@@ -33,16 +36,37 @@ class PizzaController extends Controller
         ]);
     }
 
-    public function update(Pizza $pizza, Request $request): void
+    public function update(Pizza $pizza, Status $status, User $user, bool $isChef, Request $request): RedirectResponse
     {
-        $pizza->update([
-            'status' => $request->status
-        ]);
+        if ($isChef) {
+            $pizza->fk_pizzastatus = $status->id;
+            $pizza->fk_chef = $user->id;
+            $pizza->update();
+            return Redirect::route('chef', [$user]);
+        }
+        else {
+            $pizza->fk_deliverystatus = $status->id;
+            $pizza->fk_deliveryman = $user->id;
+            $pizza->update();
+            return Redirect::route('deliveryman', [$user]);
+        }
     }
 
-    public function insert(Pizza $pizza, Request $request): RedirectResponse
+    public function insert(string $crust, string $size, User $user, Request $request): RedirectResponse
+    {   
+        $pizza = new Pizza();
+        $pizza->size = $size;
+        $pizza->crust = $crust;
+        $pizza->fk_client = $user->id;
+        $pizza->ordered = date('d-m-y h:i:s');
+        $pizza->save();
+        
+        return Redirect::route('guest', [$user]);
+    }
+
+    public function destroy(Pizza $pizza, User $user, Request $request): RedirectResponse
     {
-        $request->pizza->save();
-        return Redirect::route('guest');
+        $pizza->delete();
+        return Redirect::route('guest', [$user]);
     }
 }

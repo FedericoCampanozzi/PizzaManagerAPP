@@ -65,6 +65,12 @@ const get_data = (lbls, dts) => {
     };
 };
 
+const columns = [
+    {name:'User Name', value:'name'},
+    {name:'Email Address', value:'email'},
+    {name:'Role', value:'userole'}
+]
+
 export default function AdminDashboard({
     auth,
     users,
@@ -75,8 +81,8 @@ export default function AdminDashboard({
     chef_monthly_data_stack,
     chef_monthly_labels_stack,
     holidays
-}) {    
-    const [activeView, setActiveView] = React.useState("timeGridDay");
+}) {
+    const [activeView] = React.useState("timeGridDay");
     const calendarRef = React.useRef(null);
 
     React.useEffect(() => {
@@ -101,8 +107,8 @@ export default function AdminDashboard({
                             <Table
                                 items={users}
                                 primary="User ID"
-                                columns={["name", "email", "userole"]}
-                                action="editrole"
+                                columns={columns}
+                                action="role.edit"
                                 actionlabel="Edit Role"
                             />
                         </div>

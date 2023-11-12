@@ -15,9 +15,6 @@ use Inertia\Response;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
     public function edit(Request $request): Response
     {
         return Inertia::render('Profile/Edit', [
@@ -26,9 +23,6 @@ class ProfileController extends Controller
         ]);
     }
 
-    /**
-     * Update the user's profile information.
-     */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $request->user()->fill($request->validated());
@@ -42,27 +36,13 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit');
     }
     
-    public function update_role(User $user, Request $request): RedirectResponse
+    public function update_role(User $user, Role $role, Request $request): RedirectResponse
     {
-        $upd = $user->updateOrFail([
-            'fk_role' => Role::getRoleByName($request->role)->id
-        ]);
-
-        //$user->save();
-
-        /*return Redirect::to('/admin');*/
-        return Redirect::to('/admin', 302, [
-            'bho1' => Role::getRoleByName($request->role)->id,
-            'bho2' => Role::getRoleByName($request->role),
-            'bho3' => $request->role,
-            'bho4' => $user,
-            'bho5' => $upd
-        ]);
+        $user->fk_role = $role->id;
+        $user->update();
+        return Redirect::to('/admin');
     }
-
-    /**
-     * Delete the user's account.
-     */
+    
     public function destroy(Request $request): RedirectResponse
     {
         $request->validate([
