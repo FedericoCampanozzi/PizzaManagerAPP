@@ -46,8 +46,8 @@ return new class extends Migration
                     dstatus.name as deliverystatus
             from    pizzas as p inner join
                     users uclient on p.fk_client = uclient.id left join
-                    users udeliveryman on p.fk_client = udeliveryman.id left join
-                    users uchef on p.fk_client = uchef.id left join 
+                    users udeliveryman on p.fk_deliveryman = udeliveryman.id left join
+                    users uchef on p.fk_chef = uchef.id left join 
                     status pstatus on p.fk_pizzastatus = pstatus.id left join 
                     status dstatus on p.fk_deliverystatus = dstatus.id
     ");

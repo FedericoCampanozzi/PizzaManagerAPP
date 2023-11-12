@@ -6,12 +6,14 @@ const chef_columns = [
     {name:'Crust', value:'crust'},
     {name:'Client', value:'client'},
     {name:'Ordered', value:'ordered'},
+    {name:'Chef', value:'chef'},
     {name:'Status', value:'pizzastatus'}
 ];
 
 const deliveryman_columns = [
     {name:'Client', value:'client'},
     {name:'Ordered', value:'ordered'},
+    {name:'Delivery Man', value:'deliveryman'},
     {name:'Status', value:'deliverystatus'}    
 ];
 

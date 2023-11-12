@@ -13,7 +13,7 @@ class PublicPizzaController extends Controller
     }
 
     public function deliveryman (Pizza $pizza) {
-        return $this->worker($pizza, 'Picker', false, 6);
+        return $this->worker($pizza, 'Picked', false, 6);
     }
 
     private function worker (Pizza $pizza, string $startstatus, bool $isChef, int $limit) {

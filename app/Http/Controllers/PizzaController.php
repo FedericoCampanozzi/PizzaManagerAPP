@@ -36,9 +36,9 @@ class PizzaController extends Controller
         ]);
     }
 
-    public function update(Pizza $pizza, Status $status, User $user, bool $isChef, Request $request): RedirectResponse
+    public function update(Pizza $pizza, Status $status, User $user, string $page, Request $request)//: RedirectResponse
     {
-        if ($isChef) {
+        if ($page == "chef") {
             $pizza->fk_pizzastatus = $status->id;
             $pizza->fk_chef = $user->id;
             $pizza->update();

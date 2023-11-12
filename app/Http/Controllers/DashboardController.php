@@ -101,9 +101,9 @@ class DashboardController extends Controller
     public function chef(User $user): Response
     {
         $sql =  "
-                    select id, size, crust, client, ordered, pizzastatus
+                    select id, size, crust, client, ordered, chef, pizzastatus
                     from pizzasinfocomplete 
-                    where (fk_pizzastatus is null or fk_chef is null or fk_chef = ?) and fk_pizzastatus <> 3
+                    where (fk_pizzastatus is null or fk_chef is null or fk_chef = ?) and (fk_pizzastatus <> 3 or fk_pizzastatus is null)
                 ";
         return Inertia::render('Dashboards/Worker', [
             "isChefPage" => true,
@@ -114,10 +114,9 @@ class DashboardController extends Controller
     public function deliveryman(User $user): Response
     {
         $sql = "
-                    select id, client, ordered, deliverystatus 
+                    select id, client, ordered, deliveryman, deliverystatus 
                     from pizzasinfocomplete 
-                    where (fk_pizzastatus = 3 and fk_pizzastatus <> 6 and (fk_deliveryman is null or fk_deliveryman = ?))
-                    order by fk_deliveryman ASC
+                    where (fk_pizzastatus = 3 and fk_deliverystatus <> 6 and fk_deliveryman = ?) or (fk_deliverystatus is null and fk_pizzastatus = 3)
                 ";
         return Inertia::render('Dashboards/Worker', [
             "isChefPage" => false,

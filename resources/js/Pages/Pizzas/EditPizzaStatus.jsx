@@ -4,12 +4,12 @@ import { useForm } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 
 export default function EditPizzaStatus({auth, pizza, next_status, isChef}){
-
     const { patch, processing, recentlySuccessful } = useForm({});
 
     const submit = (e) => {
         e.preventDefault();
-        patch(route('pizza.update', [pizza, next_status, auth.user, isChef]));
+        const page = isChef ? "chef" : "deliveryman";
+        patch(route('pizza.update', [pizza, next_status, auth.user, page]));
     };
 
     return (

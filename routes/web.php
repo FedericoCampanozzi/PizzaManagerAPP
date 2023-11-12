@@ -38,7 +38,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::patch('/guest/{crust}/{size}/{user}', [PizzaController::class, 'insert'])->name('pizza.insert');
     Route::patch('/guest/{topping}/{user}', [PizzaToppingController::class, 'insert'])->name('pizzatopping.insert');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::patch('/chef/{pizza}/{status}/{user}/{isChef}', [PizzaController::class, 'update'])->name('pizza.update');
+    Route::patch('/chef/{pizza}/{status}/{user}/{page}', [PizzaController::class, 'update'])->name('pizza.update');
 
     /* DELETE API */
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

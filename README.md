@@ -17,15 +17,3 @@ Clone this repo and run the following commands to install the dependencies and s
 For regenerate database use
 
 `php artisan migrate:refresh --seed`
-
----------------------------------------------------------
-## Bug
-- In admin query (weekly and monthly) need to add 0 for month or week without data
-- Update role doesn't work correctly
-- In worker page (chef + delivery man) doesn't show some columns
-- Edit Status doesn't work correctly
-- Understand bindings attribute from react to php
-- Chef and Deliveryman have to see pizzas in their state (Chef => isPizzaStatus = 1, Deliveryman => isPizzaStatus = 0)
-- Size e crush have to select combo
-- Delete Pizza doesn't work correctly
-- Remove PublicPizzaController
