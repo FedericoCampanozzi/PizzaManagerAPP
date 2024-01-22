@@ -22,7 +22,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $pizzas = 1000;
+        $pizzas = 100;
+        if(env('APP_ENV') == "local")
+            $pizzas = 1000;
+        elseif(env('APP_ENV') == "prod") 
+            $pizzas = 10;
+
         $toppingsForPizzaFactor = 3;
         $n_toppings = 15;
 

@@ -3,7 +3,11 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "deploy": "bash deployment.aruba.sh",
+        "deploy-vendor": "bash deployment-vendor.aruba.sh",
+        "set-local-env": "bash switch-env.sh local",
+        "set-aruba-env": "bash switch-env.sh aruba"
     },
     "devDependencies": {
         "@headlessui/react": "^1.4.2",
