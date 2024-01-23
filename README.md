@@ -2,11 +2,9 @@
 
 This is an example pizza tracking app built with Laravel, React, and Inertia.js to demonstrate automatic polling and live reloads.
 
-## ROADMAP
-- Testare script e workflow
-    - Deployment su Aruba
-    - Cambio ENV per lanciare artisan
-    - Aggiornamento di vendor e deployment
+## Bug To Fix
+- URL problem into prod config (I can't change files)[Aruba]
+- Enable SSH into Aruba DNS (change plan, pay more) in order to unzip file, and delete, into server.
 
 ## Getting Started
 
